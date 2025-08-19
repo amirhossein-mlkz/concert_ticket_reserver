@@ -353,7 +353,7 @@ class melotikWebScrepper(baseWebScrepper):
             
 
 
-    def auto_reserve(self, url, user_info: dict, max_reserve=10, min_price=0):
+    def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0):
         self.build()
 
         # Wait until at least one "خرید" button is found
@@ -364,18 +364,22 @@ class melotikWebScrepper(baseWebScrepper):
                 time.sleep(0.5)
             else:
                 break
-        idx = 0
+        idx = sans_idx - 1
+        if idx> (len(self.sans_btns) -1):
+            return StatusCodes.NO_SANS_FOUND
+        
         while idx < len(self.sans_btns):
             try:
                 status = self.select_chairs(idx, max_reserve, min_price)
             except Exception as e:
                 print(e)
                 time.sleep(0.5)
+                self.driver.refresh()
                 continue
 
             if status == StatusCodes.SUCCESS:
                 self.reserve_chairs(user_info)
-                break
+                return StatusCodes.SUCCESS
 
             idx+1
 

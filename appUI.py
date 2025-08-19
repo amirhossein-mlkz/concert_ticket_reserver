@@ -48,6 +48,9 @@ class appUI(QMainWindow):
     def get_min_price(self,):
         return GUIBackend.get_input(self.ui.min_price)
     
+    def get_sans_idx(self,):
+        return GUIBackend.get_input(self.ui.sans_idx)
+    
     def set_reserver_info(self, info:dict):
         for key , value in info.items():
             GUIBackend.set_input(self.user_info[key], value)
