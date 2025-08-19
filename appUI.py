@@ -45,6 +45,9 @@ class appUI(QMainWindow):
     def get_reserve_count(self,):
         return GUIBackend.get_input(self.ui.reserve_count)
     
+    def get_min_price(self,):
+        return GUIBackend.get_input(self.ui.min_price)
+    
     def set_reserver_info(self, info:dict):
         for key , value in info.items():
             GUIBackend.set_input(self.user_info[key], value)

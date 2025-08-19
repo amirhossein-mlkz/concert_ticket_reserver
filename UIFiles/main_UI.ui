@@ -165,13 +165,6 @@ QLabel{
           <property name="topMargin">
            <number>15</number>
           </property>
-          <item row="0" column="4">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>تعداد رزرو</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="2">
            <spacer name="horizontalSpacer">
             <property name="orientation">
@@ -201,6 +194,45 @@ QLabel{
             </property>
             <property name="value">
              <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>تعداد رزرو</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label_5">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>حداقل قیمت (تومان)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QSpinBox" name="min_price">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>10000000</number>
+            </property>
+            <property name="value">
+             <number>0</number>
             </property>
            </widget>
           </item>

@@ -131,28 +131,32 @@ class melotikWebScrepper(baseWebScrepper):
         # استفاده از JavaScript برای استخراج داده‌ها
         script = """
         let chairs = [];
-        let chairElements = Array.from(document.querySelectorAll("g")).filter(chair => chair.classList.contains('active') && chair.classList.length === 1);
- 
-        
+        let chairElements = Array.from(document.querySelectorAll("g")).filter(chair => chair.classList.contains('active'));
+
+        // پردازش هر صندلی
         chairElements.forEach(chair => {
             let rn = chair.getAttribute('rn');
             let c = chair.getAttribute('c');
             let p = chair.getAttribute('p');
             let x = chair.querySelector('rect') ? chair.querySelector('rect').getAttribute('x') : null;
             let g = chair.querySelector('rect') ? chair.querySelector('rect').getAttribute('data-group') : null;
-
+            
+            // بررسی اینکه فقط کلاس active وجود داشته باشد یا خیر
+            let is_reservable = chair.classList.length === 1; // اگر تنها کلاس 'active' باشد، true است
 
             if (rn && c && p && x !== null) {
                 chairs.push({
                     rn: rn,
                     c: parseInt(c),
-                    p: parseInt(p),
+                    price: parseInt(p),
                     x: parseFloat(x),
-                    g: g,
+                    group: g,
+                    is_reservable: is_reservable,  // تعیین وضعیت قابل رزرو بودن
                     element: chair
                 });
             }
         });
+
         return chairs;
         """
 
@@ -167,19 +171,22 @@ class melotikWebScrepper(baseWebScrepper):
             c = item['c']
             chair = item['element']
             x = item['x']
-            p = item['p']
-            g = item['g']
+            p = item['price']
+            group = item['group']
+            is_reservable = item['is_reservable']
 
-            rn = str(rn) + str(g)
+            rn = str(rn) + str(group)
 
             if rn not in self.chairs:
-                self.chairs[rn] = {'chairs': [], 'chairs_num': [], 'chairs_x': [], 'chairs_price':[]}
+                self.chairs[rn] = {'chairs': [], 'chairs_num': [], 'chairs_x': [], 'chairs_price':[], 'is_reservable':[]}
 
             # افزودن صندلی به دیکشنری
             self.chairs[rn]['chairs'].append(chair)
             self.chairs[rn]['chairs_num'].append(c)
             self.chairs[rn]['chairs_x'].append(x)
             self.chairs[rn]['chairs_price'].append(p)
+            self.chairs[rn]['is_reservable'].append(is_reservable)
+
 
 
         return self.chairs
@@ -217,7 +224,7 @@ class melotikWebScrepper(baseWebScrepper):
 
     # ---------- Main Auto Reserve Flow ---------- #
 
-    def select_chairs(self, sans_idx, max_reserve ):
+    def select_chairs(self, sans_idx, max_reserve, min_price ):
         self.go_to_sans_page(sans_idx)
         self.find_chairs()
 
@@ -231,32 +238,81 @@ class melotikWebScrepper(baseWebScrepper):
             chairs_num = rn_chairs['chairs_num']
             chairs_x = rn_chairs['chairs_x']
             chairs_price = rn_chairs['chairs_price']
-
+            chairs_reservable = rn_chairs['is_reservable']
 
             i = 0
             while i < len(chairs_num):
+                if not chairs_reservable[i]:
+                    i+=1
+                    continue
                 chair = rn_chairs['chairs'][i]
 
+                this_chair_num = chairs_num[i]
+                next_chair_num = chairs_num[i+1] if i+1 < len(chairs_num) else None
+                next_next_chair_num = chairs_num[i+2] if i+2 < len(chairs_num) else None
+                next_next_next_chair_num = chairs_num[i+3] if i+3 < len(chairs_num) else None
+                prev_chair_num = chairs_num[i-1] if i>=1 else None
+                prev_prev_chair_num = chairs_num[i-2] if i>=2 else None
+                prev_prev_prev_chair_num = chairs_num[i-3] if i>=3 else None
+
+                
+                next_chair_reservable = chairs_reservable[i+1] if i+1 < len(chairs_num) else False
+                next_next_chair_reservable = chairs_reservable[i+2] if i+2 < len(chairs_num) else False
+                # next_next_next_chair_reservable = chairs_reservable[i+3] if i+3 < len(chairs_num) else False
+                prev_chair_reservable = chairs_reservable[i-1] if i>=1 else None
+                prev_prev_chair_reservable = chairs_reservable[i-2] if i>=2 else None
+                # prev_prev_prev_chair_reservable = chairs_reservable[i-3] if i>=3 else None
+                if reserve_count+1 == max_reserve:
+                    #DONT change prev beacuse we reserve it befor
+                    #prev_chair_reservable = False
+                    next_chair_reservable = False
+
+                    #prev_prev_chair_reservable = False
+                    next_next_chair_reservable = False
+
+                elif reserve_count+2 == max_reserve:
+                    #DONT change prev beacuse we reserve it befor
+                    #prev_prev_chair_reservable = False
+                    next_next_chair_reservable = False
+
+
+                #in below comment *:not reservable    0:reservable  -:not exist or sold
+                
                 if max_reserve == reserve_count + 1:
                     #next chair i only empty so we shouldn't reserve current chair
-                    this_chair = chairs_num[i]
-                    next_chair = chairs_num[i+1] if i+1 < len(chairs_num) else None
-                    next_next_chair = chairs_num[i+2] if i+2 < len(chairs_num) else None
 
-                    this_chair_x = chairs_x[i]
-                    next_chair_x = chairs_x[i+1] if i+1 < len(chairs_x) else None
-                    next_next_chair_x = chairs_x[i+2] if i+2 < len(chairs_x) else None
-                    #single chair
-                    if next_chair is not None:
-                        if next_chair - this_chair == 1:
-                            if next_next_chair is None or abs(next_chair_x-next_next_chair_x)> 8:
+                    if next_chair_num is not None:
+                        if next_chair_num - this_chair_num == 1:
+                            #00- or #00*
+                            if next_next_chair_num is None or not next_next_chair_reservable:
                                 i+=2
                                 continue
-                            if next_next_chair - next_chair !=1:
+                            #00- or #00*
+                            if next_next_chair_num - next_chair_num !=1 :
                                 i+=2
                                 continue
-                    
-                    
+                
+                #0*
+                if next_chair_num is not None and not next_chair_reservable and next_next_chair_num is None:
+                    i+=2
+                    continue
+                if prev_chair_num is not None and not prev_chair_reservable and prev_prev_chair_num is None:
+                    i+=2
+                    continue
+                #00*-
+                if (    next_chair_num is not None and next_chair_reservable 
+                    and next_next_chair_num is not None and not next_next_chair_reservable
+                    and next_next_next_chair_num is None):
+                    i+=2
+                    continue
+                
+                if (    prev_chair_num is not None and prev_chair_reservable 
+                    and prev_prev_chair_num is not None and not prev_prev_chair_reservable
+                    and prev_prev_prev_chair_num is None):
+                    i+=2
+                    continue
+                
+                        
 
 
                 if self.safe_click(chair):
@@ -297,7 +353,7 @@ class melotikWebScrepper(baseWebScrepper):
             
 
 
-    def auto_reserve(self, url, user_info: dict, max_reserve=10):
+    def auto_reserve(self, url, user_info: dict, max_reserve=10, min_price=0):
         self.build()
 
         # Wait until at least one "خرید" button is found
@@ -311,7 +367,7 @@ class melotikWebScrepper(baseWebScrepper):
         idx = 0
         while idx < len(self.sans_btns):
             try:
-                status = self.select_chairs(idx, max_reserve)
+                status = self.select_chairs(idx, max_reserve, min_price)
             except Exception as e:
                 print(e)
                 time.sleep(0.5)

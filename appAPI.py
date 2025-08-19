@@ -37,6 +37,7 @@ class appAPI:
         url = self.uiHandler.get_input_link()
         user_info = self.uiHandler.get_reserver_info()
         ticket_count = self.uiHandler.get_reserve_count()
+        min_price = self.uiHandler.get_min_price()
 
         select_webScrapper = None
         for key, webScrapper in self.webScrappers.items():
@@ -48,7 +49,7 @@ class appAPI:
             return
         
 
-        status = select_webScrapper.auto_reserve(url,user_info, ticket_count)
+        status = select_webScrapper.auto_reserve(url,user_info, ticket_count, min_price)
         if status == StatusCodes.NO_SANS_FOUND:
             self.uiHandler.show_error(' خطا، دکمه‌ای برای رزرو سانس یافت نشد')
             return
