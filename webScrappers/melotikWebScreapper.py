@@ -233,6 +233,7 @@ class melotikWebScrepper(baseWebScrepper):
         self.find_chairs()
 
         selected_chairs = []
+        selected_chairs_dict:dict[str, dict[str, list]] = {}
         reserve_count = 0
         n = len(self.chairs)
         chairs_items = list(self.chairs.items())
@@ -326,22 +327,22 @@ class melotikWebScrepper(baseWebScrepper):
 
                     
                 
-                #o*x
+                #o*x        ->
                 if next_chair_num is not None and not next_chair_reservable and next_next_chair_num is None:
                     i+=2
                     continue
-                #x*o
+                #x*o        <-
                 if prev_chair_num is not None and not prev_chair_reservable and prev_prev_chair_num is None:
                     i+=2
                     continue
-                #oo*X
+                #oo*X       ->
                 if (    next_chair_num is not None and next_chair_reservable 
                     and next_next_chair_num is not None and not next_next_chair_reservable
                     and next_next_next_chair_num is None):
                     i+=2
                     continue
                 
-                #x*oo
+                #x*oo       <-
                 if (    prev_chair_num is not None and prev_chair_reservable 
                     and prev_prev_chair_num is not None and not prev_prev_chair_reservable
                     and prev_prev_prev_chair_num is None):
@@ -354,8 +355,31 @@ class melotikWebScrepper(baseWebScrepper):
                 if self.safe_click(chair):
                     selected_chairs.append(chair)
                     reserve_count += 1
+                    if rn not in selected_chairs_dict:
+                        selected_chairs_dict[rn] = {'chairs': [], 'chairs_num':[]}
+                    selected_chairs_dict[rn]['chairs'].append(chair)
+                    selected_chairs_dict[rn]['chairs_num'].append(this_chair_num)
+
+
 
                 if reserve_count == max_reserve or i==(n-1):
+                    #remove singles
+                    for select_rn , select_rn_chairs in selected_chairs_dict.items():
+                        rn_j = 0
+                        while rn_j<len(select_rn_chairs['chairs']):
+                            #check chair has at least one neighbor
+                            if (  select_rn_chairs['chairs_num'][rn_j]+1 in select_rn_chairs['chairs_num'] 
+                                or select_rn_chairs['chairs_num'][rn_j]-1 in select_rn_chairs['chairs_num'] ):
+                                rn_j+=1
+                                continue
+                            selected_chairs.remove(select_rn_chairs['chairs'][rn_j])
+                            select_rn_chairs['chairs_num'].pop(rn_j)
+                            select_rn_chairs['chairs'].pop(rn_j)
+                            reserve_count-=1
+                
+
+                if reserve_count == max_reserve or i==(n-1):
+
                     result = self.click_and_decide(
                                     button_locator=(By.ID, "btnConfirmChairs"),
                                     success_marker_locator=(By.ID, "next-page-root"),

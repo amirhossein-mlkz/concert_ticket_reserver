@@ -13,7 +13,7 @@ class appAPI:
                                                         }
         self.infoSaver = infoSaver('user.json')
 
-        self.uiHandler.ui.input_url.setText('https://www.melotik.com/event/1686')
+        self.uiHandler.ui.input_url.setText('https://www.melotik.com/event/1688')
 
 
         self.uiHandler.reserve_btn_connector(self.start_reserve)

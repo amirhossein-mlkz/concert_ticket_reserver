@@ -165,6 +165,25 @@ QLabel{
           <property name="topMargin">
            <number>15</number>
           </property>
+          <item row="1" column="4">
+           <widget class="QSpinBox" name="sans_idx">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>10</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="5">
            <widget class="QLabel" name="label_5">
             <property name="enabled">
@@ -197,6 +216,43 @@ QLabel{
             </property>
            </widget>
           </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="label_7">
+            <property name="styleSheet">
+             <string notr="true">color:red;</string>
+            </property>
+            <property name="text">
+             <string>غیر فعال</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_9">
+            <property name="styleSheet">
+             <string notr="true">color:rgb(78, 158, 118);</string>
+            </property>
+            <property name="text">
+             <string>فعال</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>شماره سانس</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_8">
+            <property name="styleSheet">
+             <string notr="true">color:rgb(78, 158, 118);</string>
+            </property>
+            <property name="text">
+             <string>فعال</string>
+            </property>
+           </widget>
+          </item>
           <item row="0" column="2">
            <spacer name="horizontalSpacer">
             <property name="orientation">
@@ -210,10 +266,10 @@ QLabel{
             </property>
            </spacer>
           </item>
-          <item row="1" column="5">
-           <widget class="QLabel" name="label_6">
+          <item row="0" column="5">
+           <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>شماره سانس</string>
+             <string>تعداد رزرو</string>
             </property>
            </widget>
           </item>
@@ -233,62 +289,6 @@ QLabel{
             </property>
             <property name="value">
              <number>5</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="4">
-           <widget class="QSpinBox" name="sans_idx">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="5">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>تعداد رزرو</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="3">
-           <widget class="QLabel" name="label_7">
-            <property name="styleSheet">
-             <string notr="true">color:red;</string>
-            </property>
-            <property name="text">
-             <string>غیر فعال</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_8">
-            <property name="styleSheet">
-             <string notr="true">color:rgb(78, 158, 118);</string>
-            </property>
-            <property name="text">
-             <string>فعال</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="label_9">
-            <property name="styleSheet">
-             <string notr="true">color:rgb(78, 158, 118);</string>
-            </property>
-            <property name="text">
-             <string>فعال</string>
             </property>
            </widget>
           </item>

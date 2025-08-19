@@ -126,6 +126,15 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(-1, 15, -1, -1)
+        self.sans_idx = QSpinBox(self.page)
+        self.sans_idx.setObjectName(u"sans_idx")
+        self.sans_idx.setMinimumSize(QSize(100, 0))
+        self.sans_idx.setMinimum(1)
+        self.sans_idx.setMaximum(10)
+        self.sans_idx.setValue(1)
+
+        self.gridLayout_2.addWidget(self.sans_idx, 1, 4, 1, 1)
+
         self.label_5 = QLabel(self.page)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setEnabled(False)
@@ -142,14 +151,37 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.min_price, 2, 4, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.label_7 = QLabel(self.page)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setStyleSheet(u"color:red;")
 
-        self.gridLayout_2.addItem(self.horizontalSpacer, 0, 2, 1, 1)
+        self.gridLayout_2.addWidget(self.label_7, 2, 3, 1, 1)
+
+        self.label_9 = QLabel(self.page)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setStyleSheet(u"color:rgb(78, 158, 118);")
+
+        self.gridLayout_2.addWidget(self.label_9, 1, 3, 1, 1)
 
         self.label_6 = QLabel(self.page)
         self.label_6.setObjectName(u"label_6")
 
         self.gridLayout_2.addWidget(self.label_6, 1, 5, 1, 1)
+
+        self.label_8 = QLabel(self.page)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setStyleSheet(u"color:rgb(78, 158, 118);")
+
+        self.gridLayout_2.addWidget(self.label_8, 0, 3, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_2.addItem(self.horizontalSpacer, 0, 2, 1, 1)
+
+        self.label_3 = QLabel(self.page)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_2.addWidget(self.label_3, 0, 5, 1, 1)
 
         self.reserve_count = QSpinBox(self.page)
         self.reserve_count.setObjectName(u"reserve_count")
@@ -159,38 +191,6 @@ class Ui_MainWindow(object):
         self.reserve_count.setValue(5)
 
         self.gridLayout_2.addWidget(self.reserve_count, 0, 4, 1, 1)
-
-        self.sans_idx = QSpinBox(self.page)
-        self.sans_idx.setObjectName(u"sans_idx")
-        self.sans_idx.setMinimumSize(QSize(100, 0))
-        self.sans_idx.setMinimum(1)
-        self.sans_idx.setMaximum(10)
-        self.sans_idx.setValue(1)
-
-        self.gridLayout_2.addWidget(self.sans_idx, 1, 4, 1, 1)
-
-        self.label_3 = QLabel(self.page)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_2.addWidget(self.label_3, 0, 5, 1, 1)
-
-        self.label_7 = QLabel(self.page)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setStyleSheet(u"color:red;")
-
-        self.gridLayout_2.addWidget(self.label_7, 2, 3, 1, 1)
-
-        self.label_8 = QLabel(self.page)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setStyleSheet(u"color:rgb(78, 158, 118);")
-
-        self.gridLayout_2.addWidget(self.label_8, 0, 3, 1, 1)
-
-        self.label_9 = QLabel(self.page)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setStyleSheet(u"color:rgb(78, 158, 118);")
-
-        self.gridLayout_2.addWidget(self.label_9, 1, 3, 1, 1)
 
 
         self.verticalLayout_2.addLayout(self.gridLayout_2)
@@ -261,11 +261,11 @@ class Ui_MainWindow(object):
         self.family_input.setText(QCoreApplication.translate("MainWindow", u"\u0627\u0645\u06cc\u0631", None))
         self.save_info.setText(QCoreApplication.translate("MainWindow", u"\u0630\u062e\u06cc\u0631\u0647 \u0627\u0637\u0644\u0627\u0639\u0627\u062a", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u062d\u062f\u0627\u0642\u0644 \u0642\u06cc\u0645\u062a (\u062a\u0648\u0645\u0627\u0646)", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0633\u0627\u0646\u0633", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u062a\u0639\u062f\u0627\u062f \u0631\u0632\u0631\u0648", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u063a\u06cc\u0631 \u0641\u0639\u0627\u0644", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u0641\u0639\u0627\u0644", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"\u0641\u0639\u0627\u0644", None))
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0633\u0627\u0646\u0633", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u0641\u0639\u0627\u0644", None))
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u062a\u0639\u062f\u0627\u062f \u0631\u0632\u0631\u0648", None))
         self.input_url.setText(QCoreApplication.translate("MainWindow", u"https://www.melotik.com/event/14", None))
         self.start_reserve_btn.setText(QCoreApplication.translate("MainWindow", u"\u0631\u0632\u0631\u0648", None))
     # retranslateUi
