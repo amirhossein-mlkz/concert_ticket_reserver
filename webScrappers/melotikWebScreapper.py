@@ -64,9 +64,13 @@ class melotikWebScrepper(baseWebScrepper):
         if len(self.sans_btns) > idx:
             self.safe_click(self.sans_btns[idx])
 
-            WebDriverWait(self.driver, 10).until(
-            lambda driver: driver.execute_script('return document.readyState') == 'complete'
-        )
+        #     WebDriverWait(self.driver, 10).until(
+        #     lambda driver: driver.execute_script('return document.readyState') == 'complete'
+        # )
+
+        elements = WebDriverWait(self.driver, 20).until(
+                lambda d: d.find_elements(By.TAG_NAME, "g") if len(d.find_elements(By.TAG_NAME, "g")) >= 30 else False
+            )
 
     # ---------- Step 2: Click & Decide result ---------- #
 
@@ -261,51 +265,83 @@ class melotikWebScrepper(baseWebScrepper):
                 # next_next_next_chair_reservable = chairs_reservable[i+3] if i+3 < len(chairs_num) else False
                 prev_chair_reservable = chairs_reservable[i-1] if i>=1 else None
                 prev_prev_chair_reservable = chairs_reservable[i-2] if i>=2 else None
+
+                if next_chair_num is not None and (abs(next_chair_num - this_chair_num) != 1):
+                    next_chair_num = None
+                    next_next_chair_num = None
+                    next_next_next_chair_num = None
+                
+                if prev_chair_num is not None and (abs(prev_chair_num - this_chair_num) != 1):
+                    prev_chair_num = None
+                    prev_prev_chair_num = None
+                    prev_prev_prev_chair_num = None
+
+                if next_next_chair_num is not None and(abs(next_next_chair_num - this_chair_num)!=2):
+                    next_next_chair_num = None
+                    next_next_next_chair_num = None
+                
+                if prev_prev_chair_num is not None and(abs(prev_prev_chair_num - this_chair_num)!=2):
+                    prev_prev_chair_num = None
+                    prev_prev_prev_chair_num = None
+
+                if next_next_next_chair_num is not None and(abs(next_next_next_chair_num - this_chair_num)!=3):
+                    next_next_next_chair_num = None
+
+                if prev_prev_prev_chair_num is not None and(abs(prev_prev_prev_chair_num - this_chair_num)!=3):
+                    prev_prev_prev_chair_num = None
                 # prev_prev_prev_chair_reservable = chairs_reservable[i-3] if i>=3 else None
-                if reserve_count+1 == max_reserve:
-                    #DONT change prev beacuse we reserve it befor
-                    #prev_chair_reservable = False
-                    next_chair_reservable = False
+                # if reserve_count+1 == max_reserve:
+                #     #DONT change prev beacuse we reserve it befor
+                #     #prev_chair_reservable = False
+                #     next_chair_reservable = False
 
-                    #prev_prev_chair_reservable = False
-                    next_next_chair_reservable = False
+                #     #prev_prev_chair_reservable = False
+                #     next_next_chair_reservable = False
 
-                elif reserve_count+2 == max_reserve:
-                    #DONT change prev beacuse we reserve it befor
-                    #prev_prev_chair_reservable = False
-                    next_next_chair_reservable = False
+                # elif reserve_count+2 == max_reserve:
+                #     #DONT change prev beacuse we reserve it befor
+                #     #prev_prev_chair_reservable = False
+                #     next_next_chair_reservable = False
 
 
-                #in below comment *:not reservable    0:reservable  -:not exist or sold
+                #in below comment *:not reservable    0:reservable  x:not exist or sold
                 
                 if max_reserve == reserve_count + 1:
-                    #next chair i only empty so we shouldn't reserve current chair
+                    #o*x
+                    #oox
+                    if  next_next_chair_num is None and next_chair_num is not None:
+                        i+=2
+                        continue
+                    #o*o
+                    if (    (next_chair_num is not None and not next_chair_reservable) 
+                        and (next_next_chair_num is not None and next_next_chair_reservable)):
+                        i+=2
+                        continue
+                    #oo*
+                    if (    (next_chair_num is not None and next_chair_reservable)
+                        and (next_next_chair_num is not None and not next_next_chair_reservable)
+                        ):
+                        i+=2
+                        continue
 
-                    if next_chair_num is not None:
-                        if next_chair_num - this_chair_num == 1:
-                            #00- or #00*
-                            if next_next_chair_num is None or not next_next_chair_reservable:
-                                i+=2
-                                continue
-                            #00- or #00*
-                            if next_next_chair_num - next_chair_num !=1 :
-                                i+=2
-                                continue
+                    
                 
-                #0*
+                #o*x
                 if next_chair_num is not None and not next_chair_reservable and next_next_chair_num is None:
                     i+=2
                     continue
+                #x*o
                 if prev_chair_num is not None and not prev_chair_reservable and prev_prev_chair_num is None:
                     i+=2
                     continue
-                #00*-
+                #oo*X
                 if (    next_chair_num is not None and next_chair_reservable 
                     and next_next_chair_num is not None and not next_next_chair_reservable
                     and next_next_next_chair_num is None):
                     i+=2
                     continue
                 
+                #x*oo
                 if (    prev_chair_num is not None and prev_chair_reservable 
                     and prev_prev_chair_num is not None and not prev_prev_chair_reservable
                     and prev_prev_prev_chair_num is None):
@@ -340,7 +376,7 @@ class melotikWebScrepper(baseWebScrepper):
                                 if status:
                                     break
                                 time.sleep(0.5)
-                            selected_chairs.pop(0)
+                            selected_chairs.pop(-1)
                             reserve_count -= 1
                         # time.sleep(0.5)
 
