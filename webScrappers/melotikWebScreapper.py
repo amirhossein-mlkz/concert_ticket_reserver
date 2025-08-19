@@ -227,6 +227,13 @@ class melotikWebScrepper(baseWebScrepper):
 
 
     # ---------- Main Auto Reserve Flow ---------- #
+    def get_reserve_count(self,):
+        element = self.driver.find_element(By.ID, "selected_chairs_count_mobile")
+        text_value = element.text 
+        try:
+            return int(text_value)
+        except:
+            return 0
 
     def select_chairs(self, sans_idx, max_reserve, min_price ):
         self.go_to_sans_page(sans_idx)
@@ -354,7 +361,8 @@ class melotikWebScrepper(baseWebScrepper):
 
                 if self.safe_click(chair):
                     selected_chairs.append(chair)
-                    reserve_count += 1
+                    reserve_count = self.get_reserve_count()
+                    
                     if rn not in selected_chairs_dict:
                         selected_chairs_dict[rn] = {'chairs': [], 'chairs_num':[]}
                     selected_chairs_dict[rn]['chairs'].append(chair)
@@ -362,20 +370,23 @@ class melotikWebScrepper(baseWebScrepper):
 
 
 
-                if reserve_count == max_reserve or i==(n-1):
-                    #remove singles
-                    for select_rn , select_rn_chairs in selected_chairs_dict.items():
-                        rn_j = 0
-                        while rn_j<len(select_rn_chairs['chairs']):
-                            #check chair has at least one neighbor
-                            if (  select_rn_chairs['chairs_num'][rn_j]+1 in select_rn_chairs['chairs_num'] 
-                                or select_rn_chairs['chairs_num'][rn_j]-1 in select_rn_chairs['chairs_num'] ):
-                                rn_j+=1
-                                continue
-                            selected_chairs.remove(select_rn_chairs['chairs'][rn_j])
-                            select_rn_chairs['chairs_num'].pop(rn_j)
-                            select_rn_chairs['chairs'].pop(rn_j)
-                            reserve_count-=1
+                # if reserve_count == max_reserve or i==(n-1):
+                #     #remove singles
+                #     remove = True
+                #     for select_rn , select_rn_chairs in selected_chairs_dict.items():
+                #         rn_j = 0
+                #         while rn_j<len(select_rn_chairs['chairs']):
+                #             #check chair has at least one neighbor
+                #             if (  select_rn_chairs['chairs_num'][rn_j]+1 in select_rn_chairs['chairs_num'] 
+                #                 or select_rn_chairs['chairs_num'][rn_j]-1 in select_rn_chairs['chairs_num'] ):
+                #                 rn_j+=1
+                #                 continue
+                #             chair = select_rn_chairs['chairs'][rn_j]
+                #             self.safe_click(chair)
+                #             selected_chairs.remove(chair)
+                #             select_rn_chairs['chairs_num'].pop(rn_j)
+                #             select_rn_chairs['chairs'].pop(rn_j)
+                #             reserve_count-=1
                 
 
                 if reserve_count == max_reserve or i==(n-1):
