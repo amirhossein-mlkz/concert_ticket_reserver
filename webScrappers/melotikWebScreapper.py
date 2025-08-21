@@ -235,7 +235,7 @@ class melotikWebScrepper(baseWebScrepper):
         except:
             return 0
 
-    def select_chairs(self, sans_idx, max_reserve, min_price ):
+    def select_chairs(self, sans_idx, max_reserve, min_price, start_chair, end_chair ):
         self.go_to_sans_page(sans_idx)
         self.find_chairs()
 
@@ -255,6 +255,12 @@ class melotikWebScrepper(baseWebScrepper):
             i = 0
             while i < len(chairs_num):
                 if not chairs_reservable[i]:
+                    i+=1
+                    continue
+                if start_chair > 0 and chairs_num[i] < start_chair:
+                    i+=1
+                    continue
+                if end_chair > 0 and chairs_num[i]> end_chair:
                     i+=1
                     continue
                 chair = rn_chairs['chairs'][i]
@@ -424,7 +430,7 @@ class melotikWebScrepper(baseWebScrepper):
             
 
 
-    def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0):
+    def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1):
         self.build()
 
         # Wait until at least one "خرید" button is found
@@ -441,7 +447,7 @@ class melotikWebScrepper(baseWebScrepper):
         
         while idx < len(self.sans_btns):
             try:
-                status = self.select_chairs(idx, max_reserve, min_price)
+                status = self.select_chairs(idx, max_reserve, min_price, start_chair, end_chair)
             except Exception as e:
                 print(e)
                 time.sleep(0.5)

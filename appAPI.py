@@ -1,5 +1,6 @@
 from appUI import appUI
 from webScrappers.melotikWebScreapper import melotikWebScrepper
+from webScrappers.honarticketWebScreapper import honarticketWebScreapper
 from webScrappers.baseWebScrepper import baseWebScrepper
 
 from webScrappers.StatusCodes import StatusCodes
@@ -9,11 +10,12 @@ class appAPI:
 
     def __init__(self, uiHandler:appUI):
         self.uiHandler = uiHandler
-        self.webScrappers:dict[str, melotikWebScrepper] = { 'melotik.com':melotikWebScrepper()
+        self.webScrappers:dict[str, melotikWebScrepper] = { 'melotik.com':melotikWebScrepper(),
+                                                            'honarticket.com': honarticketWebScreapper(),
                                                         }
         self.infoSaver = infoSaver('user.json')
 
-        self.uiHandler.ui.input_url.setText('https://www.melotik.com/event/1688')
+        self.uiHandler.ui.input_url.setText('https://www.honarticket.com/nushe12')
 
 
         self.uiHandler.reserve_btn_connector(self.start_reserve)
@@ -39,6 +41,7 @@ class appAPI:
         ticket_count = self.uiHandler.get_reserve_count()
         min_price = self.uiHandler.get_min_price()
         sans_idx = self.uiHandler.get_sans_idx()
+        start_chair , end_chair = self.uiHandler.get_chair_range()
 
         select_webScrapper = None
         for key, webScrapper in self.webScrappers.items():
@@ -50,7 +53,13 @@ class appAPI:
             return
         
 
-        status = select_webScrapper.auto_reserve(url,sans_idx, user_info, ticket_count, min_price)
+        status = select_webScrapper.auto_reserve(url,
+                                                 sans_idx, 
+                                                 user_info, 
+                                                 ticket_count, 
+                                                 min_price,
+                                                 start_chair=start_chair,
+                                                 end_chair=end_chair)
         if status == StatusCodes.NO_SANS_FOUND:
             self.uiHandler.show_error(' خطا، سانس مورد نظر یافت نشد')
             return

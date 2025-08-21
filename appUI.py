@@ -55,3 +55,13 @@ class appUI(QMainWindow):
         for key , value in info.items():
             GUIBackend.set_input(self.user_info[key], value)
 
+    def get_chair_range(self,):
+        start = -1
+        end = -1
+        if GUIBackend.get_checkbox_value(self.ui.start_chair_checkbox):
+            start = GUIBackend.get_input(self.ui.start_chair)
+        
+        if GUIBackend.get_checkbox_value(self.ui.end_chair_checkbox):
+            end = GUIBackend.get_input(self.ui.end_chair)
+        
+        return start , end
