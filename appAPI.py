@@ -23,6 +23,8 @@ class appAPI:
         self.load_info()
         self.uiHandler.show_error('')
 
+        
+
 
         self.uiHandler.show()
 
