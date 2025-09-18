@@ -1,11 +1,13 @@
 import sys
 import os
 import traceback
-sys.path.append(os.path.join('UIFiles', 'assets'))
-sys.path.append('uiUtils')
+sys.path.append('UIFiles')
+# sys.path.append('uiUtils')
 
-#os.system('pyside6-rcc {} -o {}'.format(os.path.join('UIFiles', 'assets', 'assets.qrc'), os.path.join('UIFiles', 'assets', 'assets_rc.py')))
-os.system('pyside6-uic {} -o {}'.format(os.path.join('UIFiles', 'main_UI.ui'), os.path.join('UIFiles', 'main_UI.py')))
+BUILD = False
+if BUILD:
+    os.system('pyside6-rcc {} -o {}'.format(os.path.join('UIFiles', 'resource.qrc'), os.path.join('UIFiles', 'resource_rc.py')))
+    os.system('pyside6-uic {} -o {}'.format(os.path.join('UIFiles', 'main_UI.ui'), os.path.join('UIFiles', 'main_UI.py')))
 
 
 
