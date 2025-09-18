@@ -64,7 +64,6 @@ QLineEdit {
 
 QLineEdit:focus {
     border: 1px solid #3ddcff;
-    box-shadow: 0 0 6px rgba(61, 220, 255, 0.4);
 }
 
 /* ====== SPIN BOX ====== */
@@ -201,14 +200,20 @@ QCheckBox::indicator:checked {
                 <enum>Qt::LayoutDirection::RightToLeft</enum>
                </property>
                <property name="text">
-                <string>09136563912</string>
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>شماره خود را وارد کنید</string>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
               <widget class="QLineEdit" name="name_input">
                <property name="text">
-                <string>امیر</string>
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>نام خود را وارد کنید</string>
                </property>
               </widget>
              </item>
@@ -242,7 +247,10 @@ QCheckBox::indicator:checked {
              <item row="1" column="1">
               <widget class="QLineEdit" name="family_input">
                <property name="text">
-                <string>امیر</string>
+                <string/>
+               </property>
+               <property name="placeholderText">
+                <string>نام خانوادگی خود را وارد کنید</string>
                </property>
               </widget>
              </item>
@@ -529,7 +537,10 @@ QCheckBox::indicator:checked {
            <item>
             <widget class="QLineEdit" name="input_url">
              <property name="text">
-              <string>https://www.melotik.com/event/14</string>
+              <string/>
+             </property>
+             <property name="placeholderText">
+              <string>آدرس کنسرت مورد نظر را وارد کنید</string>
              </property>
             </widget>
            </item>

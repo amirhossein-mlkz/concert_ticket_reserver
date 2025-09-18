@@ -77,7 +77,6 @@ class Ui_MainWindow(object):
 "\n"
 "QLineEdit:focus {\n"
 "    border: 1px solid #3ddcff;\n"
-"    box-shadow: 0 0 6px rgba(61, 220, 255, 0.4);\n"
 "}\n"
 "\n"
 "/* ====== SPIN BOX ====== */\n"
@@ -105,10 +104,10 @@ class Ui_MainWindow(object):
 "\n"
 "/* ====== COMBO BOX ====== */\n"
 "QComboBox {\n"
-"    border: 1px solid #"
-                        "2f3b52;\n"
+"    border: 1px solid #2f3b52;\n"
 "    border-radius: 8px;\n"
-"    padding: 6px 10px;\n"
+"    padding: "
+                        "6px 10px;\n"
 "    background-color: #2a3445;\n"
 "    color: #f5f5f5;\n"
 "}\n"
@@ -156,9 +155,9 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QCheckBox::indicator:checked {\n"
-"    background-col"
-                        "or: #3ddcff;\n"
-"    image: url(:/icons/icons/icons8_done_26px.png);\n"
+"    background-color: #3ddcff;\n"
+"    image: url(:/icons/icons/icons8_"
+                        "done_26px.png);\n"
 "}\n"
 "")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
@@ -410,11 +409,14 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u06a9\u0646\u0633\u0631\u062a \u0628\u0627\u062a", None))
         self.log_label.setText(QCoreApplication.translate("MainWindow", u"\u0633\u0644\u0627\u0645", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u0646\u0627\u0645 \u0631\u0632\u0648 \u06a9\u0646\u0646\u062f\u0647", None))
-        self.phone_input.setText(QCoreApplication.translate("MainWindow", u"09136563912", None))
-        self.name_input.setText(QCoreApplication.translate("MainWindow", u"\u0627\u0645\u06cc\u0631", None))
+        self.phone_input.setText("")
+        self.phone_input.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u062e\u0648\u062f \u0631\u0627 \u0648\u0627\u0631\u062f \u06a9\u0646\u06cc\u062f", None))
+        self.name_input.setText("")
+        self.name_input.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0646\u0627\u0645 \u062e\u0648\u062f \u0631\u0627 \u0648\u0627\u0631\u062f \u06a9\u0646\u06cc\u062f", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0645\u0648\u0628\u0627\u06cc\u0644 \u0631\u0632\u0631\u0648 \u06a9\u0646\u0646\u062f\u0647", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"\u0646\u0627\u0645 \u062e\u0627\u0646\u0648\u062f\u0627\u06af\u06cc \u0631\u0632\u0648 \u06a9\u0646\u0646\u062f\u0647", None))
-        self.family_input.setText(QCoreApplication.translate("MainWindow", u"\u0627\u0645\u06cc\u0631", None))
+        self.family_input.setText("")
+        self.family_input.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0646\u0627\u0645 \u062e\u0627\u0646\u0648\u0627\u062f\u06af\u06cc \u062e\u0648\u062f \u0631\u0627 \u0648\u0627\u0631\u062f \u06a9\u0646\u06cc\u062f", None))
         self.save_info.setText(QCoreApplication.translate("MainWindow", u"\u0630\u062e\u06cc\u0631\u0647 \u0627\u0637\u0644\u0627\u0639\u0627\u062a", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0635\u0646\u062f\u0644\u06cc \u0634\u0631\u0648\u0639", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0635\u0646\u062f\u0644\u06cc \u067e\u0627\u06cc\u0627\u0646\u06cc", None))
@@ -426,7 +428,8 @@ class Ui_MainWindow(object):
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u062a\u0639\u062f\u0627\u062f \u0631\u0632\u0631\u0648", None))
         self.start_chair_checkbox.setText("")
         self.end_chair_checkbox.setText("")
-        self.input_url.setText(QCoreApplication.translate("MainWindow", u"https://www.melotik.com/event/14", None))
+        self.input_url.setText("")
+        self.input_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0622\u062f\u0631\u0633 \u06a9\u0646\u0633\u0631\u062a \u0645\u0648\u0631\u062f \u0646\u0638\u0631 \u0631\u0627 \u0648\u0627\u0631\u062f \u06a9\u0646\u06cc\u062f", None))
         self.start_reserve_btn.setText(QCoreApplication.translate("MainWindow", u"\u0631\u0632\u0631\u0648", None))
     # retranslateUi
 

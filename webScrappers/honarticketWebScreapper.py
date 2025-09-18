@@ -40,7 +40,7 @@ class honarticketWebScreapper(baseWebScrepper):
         self.driver.switch_to.default_content()
         # اگر در همین زمینه بود
         try:
-            WebDriverWait(self.driver, 1).until(EC.presence_of_element_located((By.ID, "hall")))
+            WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "hall")))
             return
         except: pass
         # در iframe‌ها بگرد
@@ -48,7 +48,7 @@ class honarticketWebScreapper(baseWebScrepper):
             self.driver.switch_to.default_content()
             self.driver.switch_to.frame(f)
             try:
-                WebDriverWait(self.driver, 1).until(EC.presence_of_element_located((By.ID, "hall")))
+                WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.ID, "hall")))
                 return
             except:
                 continue

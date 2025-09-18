@@ -29,7 +29,7 @@ class melotikWebScrepper(baseWebScrepper):
     # ---------- Step 1: Find "خرید" buttons ---------- #
 
     def find_sans_buttons(self):
-        buttons = WebDriverWait(self.driver, 1).until(
+        buttons = WebDriverWait(self.driver, 5).until(
             EC.presence_of_all_elements_located((By.XPATH, "//button[contains(text(), 'خرید')]"))
         )
                     

@@ -73,7 +73,7 @@ class baseWebScrepper(ABC):
             WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(element))
             # Scroll into view if required
             if scroll:
-                self.scroll_into_view_if_needed(element, sleep_time=0.2)
+                self.scroll_into_view_if_needed(element, sleep_time=0.1)
                 # self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
                 # time.sleep(0.3)
             
