@@ -188,7 +188,33 @@ class honarticketWebScreapper(baseWebScrepper):
             self.safe_click(self.sans_btns[idx])
 
       
-            
+    def click_submit_btn(self,):
+        submit_btn = self.driver.find_element(By.ID, "btnSubmit") 
+        self.safe_click(submit_btn)
+
+        try:
+            element = WebDriverWait(self.driver, 2).until(
+                EC.any_of(
+                    EC.visibility_of_element_located((By.NAME, "userFName")),  # فقط اگر قابل مشاهده باشد
+                    EC.visibility_of_element_located((By.CSS_SELECTOR, "div.block.notify"))
+                )
+            )
+            # بررسی اینکه کدام ظاهر شده
+            if element.get_attribute("name") == "userFName":
+                return True, element
+            else:
+                return False, element
+
+        except Exception as e:
+            print("Timeout! هیچ کدام پیدا نشد.")
+            return False, None
+        
+    def close_reserve_error(self, error_element):
+        a_element = error_element.find_element(By.TAG_NAME, "a")
+        if not self.safe_click(a_element):
+            time.sleep(0.5)
+            self.close_reserve_error(error_element)
+
 
 
     def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1):
@@ -220,10 +246,16 @@ class honarticketWebScreapper(baseWebScrepper):
 
 
             if status == StatusCodes.SUCCESS:
-                submit_btn = self.driver.find_element(By.ID, "btnSubmit") 
-                self.safe_click(submit_btn)
-                self.reserve_chairs(user_info)
-                return StatusCodes.SUCCESS
+                ret, element = self.click_submit_btn()
+                if element is None:
+                    self.auto_reserve(url, sans_idx, user_info, max_reserve, min_price, start_chair, end_chair)
+                    return
+
+                if not ret:
+                    self.close_reserve_error(element)
+                else:
+                    self.reserve_chairs(user_info)
+                    return StatusCodes.SUCCESS
         
 
     def reserve_chairs(self, user_info: dict):
