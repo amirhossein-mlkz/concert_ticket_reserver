@@ -229,6 +229,7 @@ class melotikWebScrepper(baseWebScrepper):
         if idx> (len(self.sans_btns) -1):
             return StatusCodes.NO_SANS_FOUND
         
+        self.go_to_sans_page(sans_idx)
         while True:
             try:
                 status = self.select_chairs(idx, max_reserve, min_price, start_chair, end_chair)
@@ -247,6 +248,7 @@ class melotikWebScrepper(baseWebScrepper):
                     print("⚠ Error:", result['error_text'])
                     # Deselect one seat and try again
                     self.driver.refresh()
+                    # self.go_to_sans_page(sans_idx)
                     continue
 
 

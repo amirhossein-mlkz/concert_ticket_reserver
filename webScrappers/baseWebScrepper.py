@@ -19,7 +19,7 @@ class baseWebScrepper(ABC):
         self.sans_btns = []
         self.chairs:dict = {}
         self.current_sans_idx = 0
-        self.build()
+        # self.build()
 
     def build(self,):
         options = webdriver.ChromeOptions()
@@ -288,7 +288,7 @@ class baseWebScrepper(ABC):
 
 
     def select_chairs(self, sans_idx, max_reserve, min_price, start_chair, end_chair ):
-        self.go_to_sans_page(sans_idx)
+        # self.go_to_sans_page(sans_idx)
         self.find_chairs()
 
         selected_chairs = []
@@ -362,7 +362,7 @@ class baseWebScrepper(ABC):
 
                 
 
-                if reserve_count == max_reserve or i==(n-1):
+                if reserve_count == max_reserve :
                     return StatusCodes.SUCCESS
                 i+=1
         if reserve_count > 0:

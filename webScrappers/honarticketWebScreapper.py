@@ -232,8 +232,8 @@ class honarticketWebScreapper(baseWebScrepper):
         if idx> (len(self.sans_btns) -1):
             return StatusCodes.NO_SANS_FOUND
     
-
-        while idx < len(self.sans_btns):
+        self.go_to_sans_page(sans_idx)
+        while True:
             try:
                 status = self.select_chairs(idx, max_reserve, min_price, start_chair=start_chair, end_chair=end_chair)
 
@@ -253,6 +253,7 @@ class honarticketWebScreapper(baseWebScrepper):
 
                 if not ret:
                     self.close_reserve_error(element)
+                    continue
                 else:
                     self.reserve_chairs(user_info)
                     return StatusCodes.SUCCESS
