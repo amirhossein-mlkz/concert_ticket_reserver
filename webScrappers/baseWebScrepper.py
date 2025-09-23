@@ -30,7 +30,7 @@ class baseWebScrepper(ABC):
 
     def go_to_url(self, url):
         self.driver.get(url)
-        #self.driver.maximize_window()
+        self.driver.maximize_window()
 
 
     @abstractmethod
@@ -53,7 +53,7 @@ class baseWebScrepper(ABC):
 
         # اسکرول به المنت
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-        time.sleep(0.05)
+        time.sleep(0.2)
         # گرفتن مختصات بعد از اسکرول
         after = element.location_once_scrolled_into_view
 
@@ -61,25 +61,27 @@ class baseWebScrepper(ABC):
         if before != after:
             time.sleep(sleep_time)
 
-    def safe_click(self, element, scroll=True, use_js=True):
-        """
-        Attempts to click an element safely:
-        - Scrolls into view
-        - Normal Selenium click
-        - JS click fallback if intercepted
-        """
-        try:
-            # Wait until the element is visible and clickable
-            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(element))
-            # Scroll into view if required
-            if scroll:
-                self.scroll_into_view_if_needed(element, sleep_time=0.1)
-                # self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-                # time.sleep(0.3)
-            
-            # Attempt to click normally
-            element.click()
+    def is_in_viewport(self, element):
+        return self.driver.execute_script("""
+            var elem = arguments[0];
+            var rect = elem.getBoundingClientRect();
+            return (
+                rect.top >= 0 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+        """, element)
 
+    def safe_click(self, element, scroll=True, use_js=True):
+        try:
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(element))
+            
+            if scroll and not self.is_in_viewport(element):
+                self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+                time.sleep(0.2)
+
+            element.click()
             return True
         except ElementClickInterceptedException:
             if use_js:
@@ -93,7 +95,6 @@ class baseWebScrepper(ABC):
         except Exception as e:
             print(f"An error occurred: {e}")
             return False
-
 
     def is_chair_in_range(self, chair_num, start, end):
         if chair_num is None:
