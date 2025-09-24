@@ -617,6 +617,21 @@ QCheckBox::indicator:checked {
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>name_input</tabstop>
+  <tabstop>family_input</tabstop>
+  <tabstop>phone_input</tabstop>
+  <tabstop>save_info</tabstop>
+  <tabstop>reserve_count</tabstop>
+  <tabstop>sans_idx</tabstop>
+  <tabstop>min_price</tabstop>
+  <tabstop>start_chair</tabstop>
+  <tabstop>end_chair</tabstop>
+  <tabstop>input_url</tabstop>
+  <tabstop>start_reserve_btn</tabstop>
+  <tabstop>start_chair_checkbox</tabstop>
+  <tabstop>end_chair_checkbox</tabstop>
+ </tabstops>
  <resources>
   <include location="resource.qrc"/>
  </resources>

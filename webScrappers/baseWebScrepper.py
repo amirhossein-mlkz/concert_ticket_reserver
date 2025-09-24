@@ -53,7 +53,7 @@ class baseWebScrepper(ABC):
 
         # اسکرول به المنت
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-        time.sleep(0.2)
+        time.sleep(1)
         # گرفتن مختصات بعد از اسکرول
         after = element.location_once_scrolled_into_view
 
@@ -61,17 +61,28 @@ class baseWebScrepper(ABC):
         if before != after:
             time.sleep(sleep_time)
 
-    def is_in_viewport(self, element):
+    def is_in_viewport(self, element, margin_top=200, margin_bottom=200):
+        """
+        چک می‌کند المان حداقل بخشی داخل ویوپورت باشد و از بالا و پایین صفحه مارجین مشخصی رعایت شود.
+        
+        :param element: WebElement
+        :param margin_top: فاصله از بالای صفحه (پیکسل)
+        :param margin_bottom: فاصله از پایین صفحه (پیکسل)
+        :return: True/False
+        """
         return self.driver.execute_script("""
             var elem = arguments[0];
+            var marginTop = arguments[1];
+            var marginBottom = arguments[2];
+
             var rect = elem.getBoundingClientRect();
-            return (
-                rect.top >= 0 &&
-                rect.left >= 0 &&
-                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-            );
-        """, element)
+            var viewHeight = (window.innerHeight || document.documentElement.clientHeight);
+
+            // بررسی اینکه بخشی از المان داخل ویوپورت باشه
+            var visible = rect.bottom > marginTop && rect.top < (viewHeight - marginBottom);
+
+            return visible;
+        """, element, margin_top, margin_bottom)
 
     def safe_click(self, element, scroll=True, use_js=True):
         try:
@@ -79,7 +90,7 @@ class baseWebScrepper(ABC):
             
             if scroll and not self.is_in_viewport(element):
                 self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
-                time.sleep(0.2)
+                time.sleep(0.1)
 
             element.click()
             return True
@@ -285,11 +296,25 @@ class baseWebScrepper(ABC):
         else:
             return False
         
-
+    def clean_bad_chairs(self,):
+        result = {}
+        for key, subdict in self.chairs.items():
+            # فرض می‌کنیم همه لیست‌ها طول یکسان دارند
+            length = len(next(iter(subdict.values())))
+            cleaned = {k: [] for k in subdict}
+            for i in range(length):
+                # اگر همه ویژگی‌ها None نبودن
+                if all(subdict[attr][i] is not None for attr in subdict):
+                    for attr in subdict:
+                        cleaned[attr].append(subdict[attr][i])
+            result[key] = cleaned
+        self.chairs = result
+        return self.chairs
 
     def select_chairs(self, sans_idx, max_reserve, min_price, start_chair, end_chair ):
         # self.go_to_sans_page(sans_idx)
         self.find_chairs()
+        self.clean_bad_chairs()
 
         selected_chairs = []
         selected_chairs_dict:dict[str, dict[str, list]] = {}
@@ -328,7 +353,7 @@ class baseWebScrepper(ABC):
                                                chairs_num=chairs_num,
                                                chairs_reservable=chairs_reservable,
                                                remain_chair=remain_chair):
-                    i+=2
+                    i+=1
                     continue
                 
                 _rn_selected_chairs_num = []
@@ -347,7 +372,7 @@ class baseWebScrepper(ABC):
                         stop_loop = True
                         break
                     else:
-                        i+=2
+                        i+=1
                         continue
 
 

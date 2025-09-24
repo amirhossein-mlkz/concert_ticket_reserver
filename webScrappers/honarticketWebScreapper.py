@@ -120,12 +120,15 @@ class honarticketWebScreapper(baseWebScrepper):
 
                 const price = parseInt(input.getAttribute("price"), 10);
 
+                
                 chairs.push(div);                              // WebElement
                 chairs_num.push(num);
                 chairs_input.push(input)
                 chairs_x.push(-1);
                 chairs_price.push(price);
                 is_reservable.push(!(div.className||'').split(/\s+/).includes('pending'));
+                
+                
             });
 
             if (chairs.length) {
@@ -137,6 +140,8 @@ class honarticketWebScreapper(baseWebScrepper):
 
         self.chairs = self.driver.execute_script(js)
         return self.chairs
+    
+    
 
 
 
@@ -232,7 +237,7 @@ class honarticketWebScreapper(baseWebScrepper):
         if idx> (len(self.sans_btns) -1):
             return StatusCodes.NO_SANS_FOUND
     
-        self.go_to_sans_page(sans_idx)
+        self.go_to_sans_page(idx)
         while True:
             try:
                 status = self.select_chairs(idx, max_reserve, min_price, start_chair=start_chair, end_chair=end_chair)

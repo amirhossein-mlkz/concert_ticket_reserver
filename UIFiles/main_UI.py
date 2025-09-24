@@ -399,6 +399,18 @@ class Ui_MainWindow(object):
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        QWidget.setTabOrder(self.name_input, self.family_input)
+        QWidget.setTabOrder(self.family_input, self.phone_input)
+        QWidget.setTabOrder(self.phone_input, self.save_info)
+        QWidget.setTabOrder(self.save_info, self.reserve_count)
+        QWidget.setTabOrder(self.reserve_count, self.sans_idx)
+        QWidget.setTabOrder(self.sans_idx, self.min_price)
+        QWidget.setTabOrder(self.min_price, self.start_chair)
+        QWidget.setTabOrder(self.start_chair, self.end_chair)
+        QWidget.setTabOrder(self.end_chair, self.input_url)
+        QWidget.setTabOrder(self.input_url, self.start_reserve_btn)
+        QWidget.setTabOrder(self.start_reserve_btn, self.start_chair_checkbox)
+        QWidget.setTabOrder(self.start_chair_checkbox, self.end_chair_checkbox)
 
         self.retranslateUi(MainWindow)
 
