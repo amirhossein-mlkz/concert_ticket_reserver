@@ -17,11 +17,11 @@ class melotikWebScrepper(baseWebScrepper):
         super().__init__()
         self.chairs:dict[str,dict[str,list]] =  {}
 
-        chairs = [1,2,3,4]
-        reservable = [False, False, True, True]
+        chairs = [1,2,3,4,5]
+        reservable = [False, False, True, True, True]
 
-        self.check_single_chair_for_myself(1,[],  chairs, reservable, remain_chair=1)
-        # self.check_single_chair_for_concert(1,  chairs, reservable, remain_chair=1)
+        # self.check_single_chair_for_myself(2,[],  chairs, reservable, remain_chair=1)
+        # self.check_single_chair_for_concert(3,[], chairs, reservable, remain_chair=1)
 
 
     # ---------- Step 1: Find "خرید" buttons ---------- #

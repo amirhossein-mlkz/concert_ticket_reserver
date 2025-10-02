@@ -144,7 +144,7 @@ class baseWebScrepper(ABC):
                 print(f"{rn} : {num} - {price}$")
 
 
-    def check_single_chair_for_concert(self,idx , chairs_num, chairs_reservable, remain_chair, start_chair=-1, end_chair=-1):
+    def check_single_chair_for_concert(self,idx , rn_selected_chairs_num:list, chairs_num, chairs_reservable, remain_chair, start_chair=-1, end_chair=-1):
         i = idx
         this_chair_num = chairs_num[i]
         next_chair_num = chairs_num[i+1] if i+1 < len(chairs_num) else None
@@ -222,7 +222,7 @@ class baseWebScrepper(ABC):
         #: o could reserve
         #: * couldn't resservable
         #: x not exist   
-        #: n we don't want reserve
+        #: n we don't want reserve base on single or chair number
         
         #o*x        ->
         if next_chair_num is not None and not next_chair_reservable and next_next_chair_num is None:
@@ -247,8 +247,19 @@ class baseWebScrepper(ABC):
             and prev_prev_chair_num is None):
             return False
         
+        #xno  <-
+        if (    prev_chair_num is not None and prev_chair_num not in rn_selected_chairs_num
+            and prev_prev_chair_num is None):
+            return False
+        
+        
         #*no  <-
         if (    prev_chair_num is not None and not self.is_chair_in_range(prev_chair_num, start_chair, end_chair)
+            and prev_prev_chair_num is not None and not prev_prev_chair_reservable):
+            return False
+        
+        #*no  <-
+        if (    prev_chair_num is not None and prev_chair_num not in rn_selected_chairs_num
             and prev_prev_chair_num is not None and not prev_prev_chair_reservable):
             return False
         
@@ -261,8 +272,8 @@ class baseWebScrepper(ABC):
         if (    next_chair_num is not None and not self.is_chair_in_range(next_chair_num, start_chair, end_chair)
             and next_next_chair_num is not None and not next_next_chair_reservable):
             return False
-        
-    
+        # #*no <-
+        # if (    pre)
         
         return True
     
@@ -281,8 +292,12 @@ class baseWebScrepper(ABC):
         prev_chair_num = chairs_num[i-1] if i>=1 else None
 
         can_reserve_next_chair = False
-        if idx+1 < len(chairs_num):
-            can_reserve_next_chair = self.check_single_chair_for_concert(idx+1, 
+        if (    idx+1 < len(chairs_num) 
+            and chairs_reservable[idx+1] 
+            and self.is_chair_in_range(chairs_num[idx+1], start_chair, end_chair)
+        ):
+            can_reserve_next_chair = self.check_single_chair_for_concert(idx+1,
+                                                                        rn_selected_chairs_num + [this_chair_num],
                                                                         chairs_num,
                                                                         chairs_reservable,
                                                                         remain_chair-1,
@@ -290,8 +305,12 @@ class baseWebScrepper(ABC):
                                                                         end_chair)
         
         can_reserve_prev_chair = False
-        if idx-1 >= 0:
+        if (    idx-1 >= 0
+            and chairs_reservable[idx-1] 
+            and self.is_chair_in_range(chairs_num[idx-1], start_chair, end_chair)
+            ):
             can_reserve_prev_chair = self.check_single_chair_for_concert(idx-1, 
+                                                                         rn_selected_chairs_num + [this_chair_num],
                                                                         chairs_num,
                                                                         chairs_reservable,
                                                                         remain_chair-1,
@@ -391,7 +410,12 @@ class baseWebScrepper(ABC):
                 #is_last_chair = (max_reserve == (reserve_count + 1))
                 remain_chair = max_reserve - reserve_count - 1
 
+                _rn_selected_chairs_num = []
+                if rn in selected_chairs_dict:
+                    _rn_selected_chairs_num = selected_chairs_dict[rn]['chairs_num']
+
                 if not self.check_single_chair_for_concert( idx=i,
+                                               rn_selected_chairs_num=_rn_selected_chairs_num,
                                                chairs_num=chairs_num,
                                                chairs_reservable=chairs_reservable,
                                                remain_chair=remain_chair,
@@ -400,9 +424,7 @@ class baseWebScrepper(ABC):
                     i+=1
                     continue
                 
-                _rn_selected_chairs_num = []
-                if rn in selected_chairs_dict:
-                    _rn_selected_chairs_num = selected_chairs_dict[rn]['chairs_num']
+                
 
                 if not self.check_single_chair_for_myself(idx=i,
                                                           rn_selected_chairs_num=_rn_selected_chairs_num,

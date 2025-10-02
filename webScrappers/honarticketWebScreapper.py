@@ -225,7 +225,23 @@ class honarticketWebScreapper(baseWebScrepper):
             time.sleep(0.5)
             self.close_reserve_error(error_element)
 
+    def clear_selected_tickets(self,):
+        tickets_container = self.driver.find_element(By.ID, "ticket-list")
+        if tickets_container:
+            tickets = tickets_container.find_elements(By.TAG_NAME, 'div')
 
+            first_one=True
+            i=0
+            while len(tickets):
+                try:
+                    del_btn = tickets[i].find_element(By.TAG_NAME, 'button')
+                    self.safe_click(del_btn, scroll=first_one)
+                    time.sleep(0.05)
+                    tickets = tickets_container.find_elements(By.TAG_NAME, 'div')
+
+                except:
+                    time.sleep(0.05)
+                    continue
 
     def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1, args:dict={}):
         self.build()
@@ -270,6 +286,7 @@ class honarticketWebScreapper(baseWebScrepper):
 
                 if not ret:
                     self.close_reserve_error(element)
+                    self.clear_selected_tickets()
                     continue
                 else:
                     self.reserve_chairs(user_info)
