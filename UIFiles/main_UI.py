@@ -250,17 +250,14 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(-1, 15, -1, -1)
-        self.label_10 = QLabel(self.bot_info)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setEnabled(False)
+        self.sans_idx = QSpinBox(self.bot_info)
+        self.sans_idx.setObjectName(u"sans_idx")
+        self.sans_idx.setMinimumSize(QSize(100, 0))
+        self.sans_idx.setMinimum(1)
+        self.sans_idx.setMaximum(10)
+        self.sans_idx.setValue(1)
 
-        self.gridLayout_2.addWidget(self.label_10, 3, 5, 1, 1)
-
-        self.label_11 = QLabel(self.bot_info)
-        self.label_11.setObjectName(u"label_11")
-        self.label_11.setEnabled(False)
-
-        self.gridLayout_2.addWidget(self.label_11, 4, 5, 1, 1)
+        self.gridLayout_2.addWidget(self.sans_idx, 1, 4, 1, 1)
 
         self.start_chair = QSpinBox(self.bot_info)
         self.start_chair.setObjectName(u"start_chair")
@@ -272,71 +269,11 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.start_chair, 3, 4, 1, 1)
 
-        self.label_8 = QLabel(self.bot_info)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setStyleSheet(u"color:rgb(78, 158, 118);")
-
-        self.gridLayout_2.addWidget(self.label_8, 0, 3, 1, 1)
-
-        self.label_6 = QLabel(self.bot_info)
-        self.label_6.setObjectName(u"label_6")
-
-        self.gridLayout_2.addWidget(self.label_6, 1, 5, 1, 1)
-
-        self.label_9 = QLabel(self.bot_info)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setStyleSheet(u"color:rgb(78, 158, 118);")
-
-        self.gridLayout_2.addWidget(self.label_9, 1, 3, 1, 1)
-
-        self.label_7 = QLabel(self.bot_info)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setStyleSheet(u"color:red;")
-
-        self.gridLayout_2.addWidget(self.label_7, 2, 3, 1, 1)
-
-        self.sans_idx = QSpinBox(self.bot_info)
-        self.sans_idx.setObjectName(u"sans_idx")
-        self.sans_idx.setMinimumSize(QSize(100, 0))
-        self.sans_idx.setMinimum(1)
-        self.sans_idx.setMaximum(10)
-        self.sans_idx.setValue(1)
-
-        self.gridLayout_2.addWidget(self.sans_idx, 1, 4, 1, 1)
-
         self.label_5 = QLabel(self.bot_info)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setEnabled(False)
 
         self.gridLayout_2.addWidget(self.label_5, 2, 5, 1, 1)
-
-        self.label_3 = QLabel(self.bot_info)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_2.addWidget(self.label_3, 0, 5, 1, 1)
-
-        self.reserve_count = QSpinBox(self.bot_info)
-        self.reserve_count.setObjectName(u"reserve_count")
-        self.reserve_count.setMinimumSize(QSize(100, 0))
-        self.reserve_count.setMinimum(1)
-        self.reserve_count.setMaximum(10)
-        self.reserve_count.setValue(5)
-
-        self.gridLayout_2.addWidget(self.reserve_count, 0, 4, 1, 1)
-
-        self.min_price = QSpinBox(self.bot_info)
-        self.min_price.setObjectName(u"min_price")
-        self.min_price.setEnabled(False)
-        self.min_price.setMinimumSize(QSize(150, 0))
-        self.min_price.setMinimum(0)
-        self.min_price.setMaximum(10000000)
-        self.min_price.setValue(0)
-
-        self.gridLayout_2.addWidget(self.min_price, 2, 4, 1, 1)
-
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer, 0, 2, 1, 1)
 
         self.end_chair = QSpinBox(self.bot_info)
         self.end_chair.setObjectName(u"end_chair")
@@ -348,15 +285,89 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.end_chair, 4, 4, 1, 1)
 
-        self.start_chair_checkbox = QCheckBox(self.bot_info)
-        self.start_chair_checkbox.setObjectName(u"start_chair_checkbox")
+        self.label_6 = QLabel(self.bot_info)
+        self.label_6.setObjectName(u"label_6")
 
-        self.gridLayout_2.addWidget(self.start_chair_checkbox, 3, 6, 1, 1)
+        self.gridLayout_2.addWidget(self.label_6, 1, 5, 1, 1)
+
+        self.label_11 = QLabel(self.bot_info)
+        self.label_11.setObjectName(u"label_11")
+        self.label_11.setEnabled(False)
+
+        self.gridLayout_2.addWidget(self.label_11, 4, 5, 1, 1)
+
+        self.label_7 = QLabel(self.bot_info)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setStyleSheet(u"color:red;")
+
+        self.gridLayout_2.addWidget(self.label_7, 2, 3, 1, 1)
 
         self.end_chair_checkbox = QCheckBox(self.bot_info)
         self.end_chair_checkbox.setObjectName(u"end_chair_checkbox")
 
         self.gridLayout_2.addWidget(self.end_chair_checkbox, 4, 6, 1, 1)
+
+        self.reserve_count = QSpinBox(self.bot_info)
+        self.reserve_count.setObjectName(u"reserve_count")
+        self.reserve_count.setMinimumSize(QSize(100, 0))
+        self.reserve_count.setMinimum(1)
+        self.reserve_count.setMaximum(10)
+        self.reserve_count.setValue(5)
+
+        self.gridLayout_2.addWidget(self.reserve_count, 0, 4, 1, 1)
+
+        self.label_8 = QLabel(self.bot_info)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setStyleSheet(u"color:rgb(78, 158, 118);")
+
+        self.gridLayout_2.addWidget(self.label_8, 0, 3, 1, 1)
+
+        self.min_price = QSpinBox(self.bot_info)
+        self.min_price.setObjectName(u"min_price")
+        self.min_price.setEnabled(False)
+        self.min_price.setMinimumSize(QSize(150, 0))
+        self.min_price.setMinimum(0)
+        self.min_price.setMaximum(10000000)
+        self.min_price.setValue(0)
+
+        self.gridLayout_2.addWidget(self.min_price, 2, 4, 1, 1)
+
+        self.label_9 = QLabel(self.bot_info)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setStyleSheet(u"color:rgb(78, 158, 118);")
+
+        self.gridLayout_2.addWidget(self.label_9, 1, 3, 1, 1)
+
+        self.label_10 = QLabel(self.bot_info)
+        self.label_10.setObjectName(u"label_10")
+        self.label_10.setEnabled(False)
+
+        self.gridLayout_2.addWidget(self.label_10, 3, 5, 1, 1)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout_2.addItem(self.horizontalSpacer, 0, 2, 1, 1)
+
+        self.start_chair_checkbox = QCheckBox(self.bot_info)
+        self.start_chair_checkbox.setObjectName(u"start_chair_checkbox")
+
+        self.gridLayout_2.addWidget(self.start_chair_checkbox, 3, 6, 1, 1)
+
+        self.label_3 = QLabel(self.bot_info)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_2.addWidget(self.label_3, 0, 5, 1, 1)
+
+        self.refresh_honar_ticket_checkbox = QCheckBox(self.bot_info)
+        self.refresh_honar_ticket_checkbox.setObjectName(u"refresh_honar_ticket_checkbox")
+
+        self.gridLayout_2.addWidget(self.refresh_honar_ticket_checkbox, 5, 6, 1, 1)
+
+        self.label_12 = QLabel(self.bot_info)
+        self.label_12.setObjectName(u"label_12")
+        self.label_12.setEnabled(False)
+
+        self.gridLayout_2.addWidget(self.label_12, 5, 5, 1, 1)
 
 
         self.verticalLayout_4.addLayout(self.gridLayout_2)
@@ -430,16 +441,18 @@ class Ui_MainWindow(object):
         self.family_input.setText("")
         self.family_input.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0646\u0627\u0645 \u062e\u0627\u0646\u0648\u0627\u062f\u06af\u06cc \u062e\u0648\u062f \u0631\u0627 \u0648\u0627\u0631\u062f \u06a9\u0646\u06cc\u062f", None))
         self.save_info.setText(QCoreApplication.translate("MainWindow", u"\u0630\u062e\u06cc\u0631\u0647 \u0627\u0637\u0644\u0627\u0639\u0627\u062a", None))
-        self.label_10.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0635\u0646\u062f\u0644\u06cc \u0634\u0631\u0648\u0639", None))
-        self.label_11.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0635\u0646\u062f\u0644\u06cc \u067e\u0627\u06cc\u0627\u0646\u06cc", None))
-        self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u0641\u0639\u0627\u0644", None))
-        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0633\u0627\u0646\u0633", None))
-        self.label_9.setText(QCoreApplication.translate("MainWindow", u"\u0641\u0639\u0627\u0644", None))
-        self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u063a\u06cc\u0631 \u0641\u0639\u0627\u0644", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"\u062d\u062f\u0627\u0642\u0644 \u0642\u06cc\u0645\u062a (\u062a\u0648\u0645\u0627\u0646)", None))
-        self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u062a\u0639\u062f\u0627\u062f \u0631\u0632\u0631\u0648", None))
-        self.start_chair_checkbox.setText("")
+        self.label_6.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0633\u0627\u0646\u0633", None))
+        self.label_11.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0635\u0646\u062f\u0644\u06cc \u067e\u0627\u06cc\u0627\u0646\u06cc", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"\u063a\u06cc\u0631 \u0641\u0639\u0627\u0644", None))
         self.end_chair_checkbox.setText("")
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"\u0641\u0639\u0627\u0644", None))
+        self.label_9.setText(QCoreApplication.translate("MainWindow", u"\u0641\u0639\u0627\u0644", None))
+        self.label_10.setText(QCoreApplication.translate("MainWindow", u"\u0634\u0645\u0627\u0631\u0647 \u0635\u0646\u062f\u0644\u06cc \u0634\u0631\u0648\u0639", None))
+        self.start_chair_checkbox.setText("")
+        self.label_3.setText(QCoreApplication.translate("MainWindow", u"\u062a\u0639\u062f\u0627\u062f \u0631\u0632\u0631\u0648", None))
+        self.refresh_honar_ticket_checkbox.setText("")
+        self.label_12.setText(QCoreApplication.translate("MainWindow", u"\u0628\u0627\u0631\u06af\u0630\u0627\u0631\u06cc \u062e\u0648\u062f\u06a9\u0627\u0631 \u0647\u0646\u0631\u062a\u06cc\u06a9\u062a", None))
         self.input_url.setText("")
         self.input_url.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u0622\u062f\u0631\u0633 \u06a9\u0646\u0633\u0631\u062a \u0645\u0648\u0631\u062f \u0646\u0638\u0631 \u0631\u0627 \u0648\u0627\u0631\u062f \u06a9\u0646\u06cc\u062f", None))
         self.start_reserve_btn.setText(QCoreApplication.translate("MainWindow", u"\u0631\u0632\u0631\u0648", None))

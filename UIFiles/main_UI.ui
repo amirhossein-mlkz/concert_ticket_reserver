@@ -327,23 +327,22 @@ QCheckBox::indicator:checked {
              <property name="topMargin">
               <number>15</number>
              </property>
-             <item row="3" column="5">
-              <widget class="QLabel" name="label_10">
-               <property name="enabled">
-                <bool>false</bool>
+             <item row="1" column="4">
+              <widget class="QSpinBox" name="sans_idx">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>0</height>
+                </size>
                </property>
-               <property name="text">
-                <string>شماره صندلی شروع</string>
+               <property name="minimum">
+                <number>1</number>
                </property>
-              </widget>
-             </item>
-             <item row="4" column="5">
-              <widget class="QLabel" name="label_11">
-               <property name="enabled">
-                <bool>false</bool>
+               <property name="maximum">
+                <number>10</number>
                </property>
-               <property name="text">
-                <string>شماره صندلی پایانی</string>
+               <property name="value">
+                <number>1</number>
                </property>
               </widget>
              </item>
@@ -369,13 +368,35 @@ QCheckBox::indicator:checked {
                </property>
               </widget>
              </item>
-             <item row="0" column="3">
-              <widget class="QLabel" name="label_8">
-               <property name="styleSheet">
-                <string notr="true">color:rgb(78, 158, 118);</string>
+             <item row="2" column="5">
+              <widget class="QLabel" name="label_5">
+               <property name="enabled">
+                <bool>false</bool>
                </property>
                <property name="text">
-                <string>فعال</string>
+                <string>حداقل قیمت (تومان)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="4">
+              <widget class="QSpinBox" name="end_chair">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="minimum">
+                <number>0</number>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="value">
+                <number>0</number>
                </property>
               </widget>
              </item>
@@ -386,13 +407,13 @@ QCheckBox::indicator:checked {
                </property>
               </widget>
              </item>
-             <item row="1" column="3">
-              <widget class="QLabel" name="label_9">
-               <property name="styleSheet">
-                <string notr="true">color:rgb(78, 158, 118);</string>
+             <item row="4" column="5">
+              <widget class="QLabel" name="label_11">
+               <property name="enabled">
+                <bool>false</bool>
                </property>
                <property name="text">
-                <string>فعال</string>
+                <string>شماره صندلی پایانی</string>
                </property>
               </widget>
              </item>
@@ -406,39 +427,10 @@ QCheckBox::indicator:checked {
                </property>
               </widget>
              </item>
-             <item row="1" column="4">
-              <widget class="QSpinBox" name="sans_idx">
-               <property name="minimumSize">
-                <size>
-                 <width>100</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>1</number>
-               </property>
-               <property name="maximum">
-                <number>10</number>
-               </property>
-               <property name="value">
-                <number>1</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="5">
-              <widget class="QLabel" name="label_5">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
+             <item row="4" column="6">
+              <widget class="QCheckBox" name="end_chair_checkbox">
                <property name="text">
-                <string>حداقل قیمت (تومان)</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string>تعداد رزرو</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -458,6 +450,16 @@ QCheckBox::indicator:checked {
                </property>
                <property name="value">
                 <number>5</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="label_8">
+               <property name="styleSheet">
+                <string notr="true">color:rgb(78, 158, 118);</string>
+               </property>
+               <property name="text">
+                <string>فعال</string>
                </property>
               </widget>
              </item>
@@ -483,6 +485,26 @@ QCheckBox::indicator:checked {
                </property>
               </widget>
              </item>
+             <item row="1" column="3">
+              <widget class="QLabel" name="label_9">
+               <property name="styleSheet">
+                <string notr="true">color:rgb(78, 158, 118);</string>
+               </property>
+               <property name="text">
+                <string>فعال</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="5">
+              <widget class="QLabel" name="label_10">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>شماره صندلی شروع</string>
+               </property>
+              </widget>
+             </item>
              <item row="0" column="2">
               <spacer name="horizontalSpacer">
                <property name="orientation">
@@ -496,28 +518,6 @@ QCheckBox::indicator:checked {
                </property>
               </spacer>
              </item>
-             <item row="4" column="4">
-              <widget class="QSpinBox" name="end_chair">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>150</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="minimum">
-                <number>0</number>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="value">
-                <number>0</number>
-               </property>
-              </widget>
-             </item>
              <item row="3" column="6">
               <widget class="QCheckBox" name="start_chair_checkbox">
                <property name="text">
@@ -525,10 +525,27 @@ QCheckBox::indicator:checked {
                </property>
               </widget>
              </item>
-             <item row="4" column="6">
-              <widget class="QCheckBox" name="end_chair_checkbox">
+             <item row="0" column="5">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>تعداد رزرو</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="6">
+              <widget class="QCheckBox" name="refresh_honar_ticket_checkbox">
                <property name="text">
                 <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="5">
+              <widget class="QLabel" name="label_12">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>بارگذاری خودکار هنرتیکت</string>
                </property>
               </widget>
              </item>

@@ -31,7 +31,7 @@ class melotikWebScrepper(baseWebScrepper):
     def find_sans_buttons(self):
         elements = WebDriverWait(self.driver, 5).until(
                     EC.presence_of_all_elements_located(
-                        (By.XPATH, "//button[contains(text(), 'زودی') or contains(text(), 'به زودی')] | //div[contains(text(), 'زودی') or contains(text(), 'به زودی')]")
+                        (By.XPATH, "//button[contains(text(), 'خرید')] | //div[ contains(text(), 'به زودی')]")
                     )
                 )
                     
@@ -216,7 +216,7 @@ class melotikWebScrepper(baseWebScrepper):
         
     
 
-    def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1):
+    def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1, args={}):
         self.build()
 
         # Wait until at least one "خرید" button is found

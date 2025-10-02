@@ -43,6 +43,8 @@ class appAPI:
         min_price = self.uiHandler.get_min_price()
         sans_idx = self.uiHandler.get_sans_idx()
         start_chair , end_chair = self.uiHandler.get_chair_range()
+        args = {}
+        args['honarticket_refresh'] = self.uiHandler.get_honarticket_refresh()
 
         select_webScrapper = None
         for key, webScrapper in self.webScrappers.items():
@@ -60,7 +62,8 @@ class appAPI:
                                                  ticket_count, 
                                                  min_price,
                                                  start_chair=start_chair,
-                                                 end_chair=end_chair)
+                                                 end_chair=end_chair,
+                                                 args = args)
         if status == StatusCodes.NO_SANS_FOUND:
             self.uiHandler.show_error(' خطا، سانس مورد نظر یافت نشد')
             return

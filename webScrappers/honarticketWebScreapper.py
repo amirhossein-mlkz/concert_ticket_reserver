@@ -177,18 +177,20 @@ class honarticketWebScreapper(baseWebScrepper):
     def find_sans_buttons(self, timeout=5):
         wait = WebDriverWait(self.driver, timeout)
 
-        sans_container = wait.until(
-            EC.presence_of_element_located((By.ID, "showTimesMenu"))
-        )
+        # sans_container = wait.until(
+        #     EC.presence_of_element_located((By.ID, "showTimesMenu"))
+        # )
 
-        wait.until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "#showTimesMenu a"))
-        )
-
-        sans_containers = self.driver.find_element(By.ID, "showTimesMenu")        
-        sans = sans_containers.find_elements(By.CSS_SELECTOR, "a:not(.disabled):not(.full)")
-        print(f"{datetime.now()} Found {len(sans)} reserve buttons.")
-        self.sans_btns = sans
+        # wait.until(
+        #     EC.presence_of_element_located((By.CSS_SELECTOR, "#showTimesMenu a"))
+        # )
+        self.sans_btns = []
+        sans_containers = self.driver.find_elements(By.ID, "showTimesMenu")   
+        if len(sans_containers) > 0:
+            sans_containers = sans_containers[0]
+            sans = sans_containers.find_elements(By.CSS_SELECTOR, "a:not(.disabled):not(.full)")
+            print(f"{datetime.now()} Found {len(sans)} reserve buttons.")
+            self.sans_btns = sans
         return self.sans_btns
 
     def go_to_sans_page(self, idx):
@@ -225,11 +227,17 @@ class honarticketWebScreapper(baseWebScrepper):
 
 
 
-    def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1):
+    def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1, args:dict={}):
         self.build()
-        self.go_to_url(url)
+
+        if not args.get('honarticket_refresh'):
+            self.go_to_url(url)
+
         while True:
-            # self.check_accept_rules()
+            if args.get('honarticket_refresh'):
+                self.go_to_url(url)
+                self.check_accept_rules()
+
             self.find_sans_buttons()
             if len(self.sans_btns) == 0:
                 time.sleep(0.3)
@@ -243,6 +251,7 @@ class honarticketWebScreapper(baseWebScrepper):
         self.go_to_sans_page(idx)
         while True:
             try:
+                self.find_chairs()
                 status = self.select_chairs(idx, max_reserve, min_price, start_chair=start_chair, end_chair=end_chair)
 
         

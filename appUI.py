@@ -65,3 +65,6 @@ class appUI(QMainWindow):
             end = GUIBackend.get_input(self.ui.end_chair)
         
         return start , end
+    
+    def get_honarticket_refresh(self,):
+        return  GUIBackend.get_checkbox_value(self.ui.refresh_honar_ticket_checkbox)
