@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException,WebDriverException
-
+import os
 import time
 from abc import ABC, abstractmethod
 from .StatusCodes import StatusCodes
@@ -21,12 +21,30 @@ class baseWebScrepper(ABC):
         self.current_sans_idx = 0
         # self.build()
 
-    def build(self,):
+    def build(self):
         options = webdriver.ChromeOptions()
         options.page_load_strategy = 'eager'  # فقط تا DOM اولیه لود شود
-        # options.page_load_strategy = 'none'  # حتی صبر نمی‌کند
 
-        self.driver = webdriver.Chrome(options=options)
+        # خاموش کردن GCM و PushMessaging
+        options.add_argument("--disable-features=GCM,PushMessaging")
+        options.add_argument("--disable-background-networking")
+        options.add_argument("--disable-component-update")
+        options.add_argument("--disable-default-apps")
+        options.add_argument("--no-default-browser-check")
+        options.add_argument("--no-first-run")
+
+        # بلاک کردن نوتیفیکیشن‌ها
+        prefs = {"profile.default_content_setting_values.notifications": 2}
+        options.add_experimental_option("prefs", prefs)
+
+        # حذف لاگ‌های اضافه
+        options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
+        options.add_experimental_option("useAutomationExtension", False)
+
+        # فرستادن لاگ chromedriver به /dev/null (یا nul در ویندوز)
+        service = Service(log_path=os.devnull)
+
+        self.driver = webdriver.Chrome(service=service, options=options)
 
     def go_to_url(self, url):
         self.driver.get(url)
@@ -167,23 +185,23 @@ class baseWebScrepper(ABC):
         if prev_prev_prev_chair_num is not None and(abs(prev_prev_prev_chair_num - this_chair_num)!=3):
             prev_prev_prev_chair_num = None
         #------------------------------------------------------------------------------------------------
-        if not self.is_chair_in_range(prev_chair_num, start_chair, end_chair):
-            prev_chair_num = None
+        # if not self.is_chair_in_range(prev_chair_num, start_chair, end_chair):
+        #     prev_chair_num = None
 
-        if not self.is_chair_in_range(prev_prev_chair_num, start_chair, end_chair):
-            prev_prev_chair_num = None
+        # if not self.is_chair_in_range(prev_prev_chair_num, start_chair, end_chair):
+        #     prev_prev_chair_num = None
 
-        if not self.is_chair_in_range(prev_prev_prev_chair_num, start_chair, end_chair):
-            prev_prev_prev_chair_num = None
+        # if not self.is_chair_in_range(prev_prev_prev_chair_num, start_chair, end_chair):
+        #     prev_prev_prev_chair_num = None
 
-        if not self.is_chair_in_range(next_chair_num, start_chair, end_chair):
-            next_chair_num = None
+        # if not self.is_chair_in_range(next_chair_num, start_chair, end_chair):
+        #     next_chair_num = None
 
-        if not self.is_chair_in_range(next_next_chair_num, start_chair, end_chair):
-            next_next_chair_num = None
+        # if not self.is_chair_in_range(next_next_chair_num, start_chair, end_chair):
+        #     next_next_chair_num = None
 
-        if not self.is_chair_in_range(next_next_next_chair_num, start_chair, end_chair):
-            next_next_next_chair_num = None
+        # if not self.is_chair_in_range(next_next_next_chair_num, start_chair, end_chair):
+        #     next_next_next_chair_num = None
             
         
         if remain_chair<=0: #max_reserve == reserve_count + 1:
@@ -204,6 +222,7 @@ class baseWebScrepper(ABC):
         #: o could reserve
         #: * couldn't resservable
         #: x not exist   
+        #: n we don't want reserve
         
         #o*x        ->
         if next_chair_num is not None and not next_chair_reservable and next_next_chair_num is None:
@@ -223,10 +242,27 @@ class baseWebScrepper(ABC):
             and prev_prev_prev_chair_num is None):
             return False
         
-        #Xoo <-  : this happend beacuse we pass fist chair for not pass check_single_myelf
-        # if (    prev_chair_num is not None and prev_chair_reservable
-        #     and prev_prev_chair_num is None):
-        #     return False
+        #xno  <-
+        if (    prev_chair_num is not None and not self.is_chair_in_range(prev_chair_num, start_chair, end_chair)
+            and prev_prev_chair_num is None):
+            return False
+        
+        #*no  <-
+        if (    prev_chair_num is not None and not self.is_chair_in_range(prev_chair_num, start_chair, end_chair)
+            and prev_prev_chair_num is not None and not prev_prev_chair_reservable):
+            return False
+        
+        #onx ->
+        if (    next_chair_num is not None and not self.is_chair_in_range(next_chair_num, start_chair, end_chair)
+            and next_next_chair_num is None):
+            return False
+        
+        #on* ->
+        if (    next_chair_num is not None and not self.is_chair_in_range(next_chair_num, start_chair, end_chair)
+            and next_next_chair_num is not None and not next_next_chair_reservable):
+            return False
+        
+    
         
         return True
     
@@ -330,6 +366,12 @@ class baseWebScrepper(ABC):
             chairs_x = rn_chairs['chairs_x']
             chairs_price = rn_chairs['chairs_price']
             chairs_reservable = rn_chairs['is_reservable']
+            
+            #------------------set chairs out of range reservable False----------------------
+            # for k in range(len(chairs_num)):
+            #     if not self.is_chair_in_range(chairs_num[k], start_chair, end_chair):
+            #         chairs_reservable[k] = False
+
             if stop_loop:
                 break
 
@@ -352,7 +394,9 @@ class baseWebScrepper(ABC):
                 if not self.check_single_chair_for_concert( idx=i,
                                                chairs_num=chairs_num,
                                                chairs_reservable=chairs_reservable,
-                                               remain_chair=remain_chair):
+                                               remain_chair=remain_chair,
+                                               start_chair=start_chair,
+                                               end_chair=end_chair):
                     i+=1
                     continue
                 

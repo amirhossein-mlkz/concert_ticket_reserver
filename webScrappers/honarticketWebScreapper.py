@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementClickInterceptedException,WebDriverException
 import time
+from datetime import datetime
 
 from webScrappers.baseWebScrepper import baseWebScrepper
 from .StatusCodes import StatusCodes
@@ -119,14 +120,16 @@ class honarticketWebScreapper(baseWebScrepper):
                 const num = parseInt(m[0], 10);
 
                 const price = parseInt(input.getAttribute("price"), 10);
-
+                const resevable = !(div.className||'').split(/\s+/).includes('pending');
                 
                 chairs.push(div);                              // WebElement
                 chairs_num.push(num);
                 chairs_input.push(input)
                 chairs_x.push(-1);
                 chairs_price.push(price);
-                is_reservable.push(!(div.className||'').split(/\s+/).includes('pending'));
+                is_reservable.push(resevable);
+                console.log(rn, 'class =', div.className, 'chairs_num =', num, 'reserervable = ', resevable);
+
                 
                 
             });
@@ -183,8 +186,8 @@ class honarticketWebScreapper(baseWebScrepper):
         )
 
         sans_containers = self.driver.find_element(By.ID, "showTimesMenu")        
-        sans = sans_containers.find_elements(By.CSS_SELECTOR, "a:not(.disabled)")
-        print(f"Found {len(sans)} reserve buttons.")
+        sans = sans_containers.find_elements(By.CSS_SELECTOR, "a:not(.disabled):not(.full)")
+        print(f"{datetime.now()} Found {len(sans)} reserve buttons.")
         self.sans_btns = sans
         return self.sans_btns
 
@@ -224,12 +227,12 @@ class honarticketWebScreapper(baseWebScrepper):
 
     def auto_reserve(self, url,sans_idx, user_info: dict, max_reserve=10, min_price=0, start_chair=-1, end_chair=-1):
         self.build()
+        self.go_to_url(url)
         while True:
-            self.go_to_url(url)
-            self.check_accept_rules()
+            # self.check_accept_rules()
             self.find_sans_buttons()
             if len(self.sans_btns) == 0:
-                time.sleep(0.5)
+                time.sleep(0.3)
             else:
                 break
 
@@ -262,6 +265,9 @@ class honarticketWebScreapper(baseWebScrepper):
                 else:
                     self.reserve_chairs(user_info)
                     return StatusCodes.SUCCESS
+            
+            else:
+                time.sleep(0.5)
         
 
     def reserve_chairs(self, user_info: dict):
