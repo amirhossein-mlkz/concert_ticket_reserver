@@ -5,6 +5,7 @@ from webScrappers.baseWebScrepper import baseWebScrepper
 
 from webScrappers.StatusCodes import StatusCodes
 from infoSaver import infoSaver
+from backend.myLogger import myLogger, LOG_SEPRATOR
 
 class appAPI:
 
@@ -14,6 +15,7 @@ class appAPI:
                                                             'honarticket.com': honarticketWebScreapper(),
                                                         }
         self.infoSaver = infoSaver('user.json')
+        self.logger = myLogger().get_logger()
 
 
 
@@ -24,7 +26,7 @@ class appAPI:
 
         
 
-
+        self.logger.info("software init")
         self.uiHandler.show()
 
     def save_info(self,):
@@ -45,13 +47,31 @@ class appAPI:
         start_chair , end_chair = self.uiHandler.get_chair_range()
         args = {}
         args['honarticket_refresh'] = self.uiHandler.get_honarticket_refresh()
+        
+        self.logger.info(LOG_SEPRATOR)
+        self.logger.info("Start reserve on Settings")
+        self.logger.info(f"url: {url}")
+        self.logger.info(f"user_info: {user_info}")
+        self.logger.info(f"ticket_count: {ticket_count}")
+        self.logger.info(f"sans_idx: {sans_idx}")
+        self.logger.info(f"chairs range: {start_chair} - {end_chair}")
+        self.logger.info(f"args: {args}")
+        self.logger.info(LOG_SEPRATOR)
+
+
+
+
+
+
 
         select_webScrapper = None
         for key, webScrapper in self.webScrappers.items():
             if key in url:
+                self.logger.info(f"detected webscrapper: {key}")
                 select_webScrapper = webScrapper
 
         if select_webScrapper is None:
+            self.logger.warning(f"no webscrapper founded for '{url}'")
             self.uiHandler.show_error('سایت مورد نظر تعریف نشده است')
             return
         

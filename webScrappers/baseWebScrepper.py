@@ -11,7 +11,7 @@ import os
 import time
 from abc import ABC, abstractmethod
 from .StatusCodes import StatusCodes
-
+from backend.myLogger import myLogger,LOG_SEPRATOR
 class baseWebScrepper(ABC):
 
     def __init__(self,):
@@ -19,6 +19,7 @@ class baseWebScrepper(ABC):
         self.sans_btns = []
         self.chairs:dict = {}
         self.current_sans_idx = 0
+        self.logger = myLogger().get_logger()
         # self.build()
 
     def build(self):
@@ -135,14 +136,25 @@ class baseWebScrepper(ABC):
         return True
     
     def print_chairs(self, chair_items:dict=None ):
+        self.logger.info(LOG_SEPRATOR)
+        self.logger.info("PRINT CHAIRS")
+        self.logger.info(LOG_SEPRATOR)
+
         if chair_items is None:
             self.chairs.items()
         for rn, rn_chairs in chair_items:
+            
+            self.logger.info(f"rn:{rn}")
+
             for i in range(len(rn_chairs['chairs_num'])):
                 num = rn_chairs['chairs_num'][i]
                 price = rn_chairs['chairs_price'][i]
-                print(f"{rn} : {num} - {price}$")
-
+                x = rn_chairs['chairs_x'][i]
+                reservable = rn_chairs['is_reservable'][i]
+                self.logger.info(f"chair {rn}: num={num} price = {price} reservable={reservable} x={x}")
+        
+        self.logger.info(LOG_SEPRATOR)
+        self.logger.info(LOG_SEPRATOR)
 
     def check_single_chair_for_concert(self,idx , rn_selected_chairs_num:list, chairs_num, chairs_reservable, remain_chair, start_chair=-1, end_chair=-1):
         i = idx
@@ -286,6 +298,22 @@ class baseWebScrepper(ABC):
                                       remain_chair, 
                                       start_chair=-1, 
                                       end_chair=-1):
+        
+        self.logger.info('check single for myself:')
+        self.logger.info(f'\t idx:{idx}')
+        self.logger.info(f'\t rn_selected_chairs_num:{rn_selected_chairs_num}')
+        self.logger.info(f'\t chairs_num:{chairs_num}')
+        self.logger.info(f'\t chairs_reservable:{chairs_reservable}')
+        self.logger.info(f'\t remain_chair:{remain_chair}')
+        self.logger.info(f'\t start_chair:{start_chair}')
+        self.logger.info(f'\t end_chair:{end_chair}')
+        self.logger.info(f'\n')
+
+
+
+
+
+
         i = idx
         this_chair_num = chairs_num[i]
         next_chair_num = chairs_num[i+1] if i+1 < len(chairs_num) else None
@@ -369,7 +397,7 @@ class baseWebScrepper(ABC):
     def select_chairs(self, sans_idx, max_reserve, min_price, start_chair, end_chair ):
         # self.go_to_sans_page(sans_idx)
         self.find_chairs()
-        self.clean_bad_chairs()
+        # self.clean_bad_chairs()
 
         selected_chairs = []
         selected_chairs_dict:dict[str, dict[str, list]] = {}
@@ -379,12 +407,18 @@ class baseWebScrepper(ABC):
         chairs_items.sort( key=lambda x: sum(x[1]['chairs_price']) / len(x[1]['chairs_price']), reverse=True)
         self.print_chairs(chairs_items)
 
+        self.logger.info("\n \n START SELECT CHAR \n \n")
+
         stop_loop = False
         for rn, rn_chairs in chairs_items:
             chairs_num = rn_chairs['chairs_num']
             chairs_x = rn_chairs['chairs_x']
             chairs_price = rn_chairs['chairs_price']
             chairs_reservable = rn_chairs['is_reservable']
+
+            self.logger.info(f"rn {rn} status:\n\tnums: {chairs_num}\n\treservable: {chairs_reservable} ")
+            self.logger.info(LOG_SEPRATOR + '\n')
+
             
             #------------------set chairs out of range reservable False----------------------
             # for k in range(len(chairs_num)):
@@ -396,19 +430,23 @@ class baseWebScrepper(ABC):
 
             i = 0
             while i < len(chairs_num):
+                remain_chair = max_reserve - reserve_count - 1
+
+                self.logger.info(LOG_SEPRATOR + '\n')
+                self.logger.info(f"Check chair number: {chairs_num[i]}   idx:{i}")
+                self.logger.info(f" remain chair for reserve except this one: {remain_chair}")
+
                 if not chairs_reservable[i]:
                     i+=1
+                    self.logger.info(f"not reservable")
                     continue
-                if start_chair > 0 and chairs_num[i] < start_chair:
+                if not self.is_chair_in_range(chairs_num[i], start_chair, end_chair):
                     i+=1
+                    self.logger.info(f"chairs number was not in range: {start_chair} to {end_chair}" )
                     continue
-                if end_chair > 0 and chairs_num[i]> end_chair:
-                    i+=1
-                    continue
+
                 chair = rn_chairs['chairs'][i]
 
-                #is_last_chair = (max_reserve == (reserve_count + 1))
-                remain_chair = max_reserve - reserve_count - 1
 
                 _rn_selected_chairs_num = []
                 if rn in selected_chairs_dict:

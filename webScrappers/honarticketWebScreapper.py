@@ -81,64 +81,70 @@ class honarticketWebScreapper(baseWebScrepper):
         js = r"""
        let main_hall;
 
-        const hall = document.getElementById('sectionTabs');
+        main_hall = document.getElementById('sectionTabs');
 
-        if (!hall) {
+        if (!main_hall) {
             main_hall = document.getElementById('hall');
-        } else {
-            main_hall = hall.querySelector("div");
-        }
-
-        
+        } 
 
         if (!main_hall) return {};
 
+        let blocks = main_hall.querySelectorAll('.block');
 
-        const rows = main_hall.querySelectorAll('.row');
+        if (blocks.length === 0) {
+            blocks = [main_hall];
+        }
+
         const res = {};
 
-        rows.forEach(row => {
-            const rn = row.id || '';
-            // دقیقا همان شرط شما: div.chair که .reserved ندارد
-            const divs = row.querySelectorAll('div.chair:not(.reserved)');
-            if (!divs.length) return;
+        blocks.forEach(block => {
+            let rows = block.querySelectorAll('.row');
+            const block_rn = block.id || '';
 
-            const chairs = [];
-            const chairs_input = [];
-            const chairs_num = [];
-            const chairs_x = [];
-            const chairs_price = [];
-            const is_reservable = [];
+            rows.forEach(row => {
+                const rn = (row.id || '') + block_rn;   // ✅ اینجا درست شد
 
-            divs.forEach(div => {
-                const input = div.querySelector("input[name='chair']");
-                if (!input) return;
+                // فقط صندلی‌هایی که reserved یا locked-chair نباشن
+                const divs = row.querySelectorAll('div.chair:not(.reserved):not(.locked-chair)');
+                if (!divs.length) return;
 
-                const txt = div.textContent || '';
-                const m = txt.match(/\d+/);
-                if (!m) return;
-                const num = parseInt(m[0], 10);
+                const chairs = [];
+                const chairs_input = [];
+                const chairs_num = [];
+                const chairs_x = [];
+                const chairs_price = [];
+                const is_reservable = [];
 
-                const price = parseInt(input.getAttribute("price"), 10);
-                const resevable = !(div.className||'').split(/\s+/).includes('pending');
-                
-                chairs.push(div);                              // WebElement
-                chairs_num.push(num);
-                chairs_input.push(input)
-                chairs_x.push(-1);
-                chairs_price.push(price);
-                is_reservable.push(resevable);
-                console.log(rn, 'class =', div.className, 'chairs_num =', num, 'reserervable = ', resevable);
+                divs.forEach(div => {
+                    const input = div.querySelector("input[name='chair']");
+                    if (!input) return;
 
-                
-                
+                    const txt = div.textContent || '';
+                    const m = txt.match(/\d+/);
+                    if (!m) return;
+
+                    const num = parseInt(m[0], 10);
+                    const price = parseInt(input.getAttribute("price"), 10);
+                    const resevable = !(div.className || '').split(/\s+/).includes('pending');
+
+                    chairs.push(div);                // WebElement
+                    chairs_num.push(num);
+                    chairs_input.push(input);
+                    chairs_x.push(-1);
+                    chairs_price.push(price);
+                    is_reservable.push(resevable);
+
+                    console.log(rn, 'class =', div.className, 'chairs_num =', num, 'price=', price, 'reservable = ', resevable);
+                });
+
+                if (chairs.length) {
+                    res[rn] = { chairs, chairs_input, chairs_num, chairs_x, chairs_price, is_reservable };
+                }
             });
-
-            if (chairs.length) {
-                res[rn] = { chairs,chairs_input, chairs_num, chairs_x, chairs_price, is_reservable };
-            }
         });
+
         return res;
+
         """
 
         self.chairs = self.driver.execute_script(js)
@@ -267,7 +273,7 @@ class honarticketWebScreapper(baseWebScrepper):
         self.go_to_sans_page(idx)
         while True:
             try:
-                self.find_chairs()
+                # self.find_chairs()
                 status = self.select_chairs(idx, max_reserve, min_price, start_chair=start_chair, end_chair=end_chair)
 
         
