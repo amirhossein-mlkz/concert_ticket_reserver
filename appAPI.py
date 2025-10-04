@@ -11,8 +11,8 @@ class appAPI:
 
     def __init__(self, uiHandler:appUI):
         self.uiHandler = uiHandler
-        self.webScrappers:dict[str, melotikWebScrepper] = { 'melotik.com':melotikWebScrepper(),
-                                                            'honarticket.com': honarticketWebScreapper(),
+        self.webScrappers:dict[str, melotikWebScrepper] = { 'melotik':melotikWebScrepper(),
+                                                            'honarticket': honarticketWebScreapper(),
                                                         }
         self.infoSaver = infoSaver('user.json')
         self.logger = myLogger().get_logger()

@@ -244,8 +244,10 @@ class honarticketWebScreapper(baseWebScrepper):
                     self.safe_click(del_btn, scroll=first_one)
                     time.sleep(0.05)
                     tickets = tickets_container.find_elements(By.TAG_NAME, 'div')
+                    first_one = False
 
                 except:
+                    first_one = True
                     time.sleep(0.05)
                     continue
 
@@ -261,10 +263,11 @@ class honarticketWebScreapper(baseWebScrepper):
                 self.check_accept_rules()
 
             self.find_sans_buttons()
-            if len(self.sans_btns) == 0:
-                time.sleep(0.3)
-            else:
+            if len(self.sans_btns) > (sans_idx - 1):
                 break
+            else:
+                time.sleep(0.3)
+                continue
 
         idx = sans_idx - 1
         if idx> (len(self.sans_btns) -1):

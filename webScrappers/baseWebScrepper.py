@@ -12,6 +12,8 @@ import time
 from abc import ABC, abstractmethod
 from .StatusCodes import StatusCodes
 from backend.myLogger import myLogger,LOG_SEPRATOR
+from natsort import natsorted
+
 class baseWebScrepper(ABC):
 
     def __init__(self,):
@@ -404,7 +406,13 @@ class baseWebScrepper(ABC):
         reserve_count = 0
         n = len(self.chairs)
         chairs_items = list(self.chairs.items())
-        chairs_items.sort( key=lambda x: sum(x[1]['chairs_price']) / len(x[1]['chairs_price']), reverse=True)
+        def sort_func(x):
+            mean_price = sum(x[1]['chairs_price']) / len(x[1]['chairs_price'])
+            # mean_price = str(mean_price).zfill(15)
+            # mean_price = mean_price + str(x[0]) #rn key
+            # print(x[0])
+            return -mean_price, x[0]
+        chairs_items = natsorted( chairs_items, key= sort_func)
         self.print_chairs(chairs_items)
 
         self.logger.info("\n \n START SELECT CHAR \n \n")

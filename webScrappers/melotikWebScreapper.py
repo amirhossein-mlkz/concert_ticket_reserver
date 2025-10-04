@@ -123,66 +123,49 @@ class melotikWebScrepper(baseWebScrepper):
             return {}
 
         script = """
-        let chairs = [];
-        let chairElements = Array.from(document.querySelectorAll("g")).filter(chair => chair.classList.contains('active'));
+        const chairsDict = {};
+        const chairElements = document.querySelectorAll("g.active");
 
-        // پردازش هر صندلی
-        chairElements.forEach(chair => {
-            let rn = chair.getAttribute('rn');
-            let c = chair.getAttribute('c');
-            let p = chair.getAttribute('p');
-            let x = chair.querySelector('rect') ? chair.querySelector('rect').getAttribute('x') : null;
-            let g = chair.querySelector('rect') ? chair.querySelector('rect').getAttribute('data-group') : null;
+        for (const chair of chairElements) {
+            const rect = chair.querySelector('rect');
+            if (!rect) continue;
+
             
-            // بررسی اینکه فقط کلاس active وجود داشته باشد یا خیر
-            let is_reservable = chair.classList.length === 1; // اگر تنها کلاس 'active' باشد، true است
+            const rn = chair.getAttribute('rn');
+            const c = chair.getAttribute('c');
+            const p = chair.getAttribute('p');
+            if (!rn || !c || !p) continue;
 
-            if (rn && c && p && x !== null) {
-                chairs.push({
-                    rn: rn,
-                    c: parseInt(c),
-                    price: parseInt(p),
-                    x: parseFloat(x),
-                    group: g,
-                    is_reservable: is_reservable,  // تعیین وضعیت قابل رزرو بودن
-                    element: chair
-                });
+            const x = +rect.getAttribute('x');
+            const g = rect.getAttribute('data-group');
+            const is_reservable = chair.classList.length === 1;
+            const key = rn + g;
+
+            if (!chairsDict[key]) {
+                chairsDict[key] = {
+                    chairs: [],
+                    chairs_num: [],
+                    chairs_x: [],
+                    chairs_price: [],
+                    is_reservable: []
+                };
             }
-        });
 
-        return chairs;
+            const group = chairsDict[key];
+            group.chairs.push(chair);
+            group.chairs_num.push(+c);
+            group.chairs_x.push(x);
+            group.chairs_price.push(+p);
+            group.is_reservable.push(is_reservable);
+        }
+
+        return chairsDict;
         """
 
-        # اجرای اسکریپت جاوا اسکریپت برای استخراج داده‌ها از مرورگر
-        chairs_data = self.driver.execute_script(script)
-
-        self.chairs = {}
-
-        # پردازش داده‌های دریافت شده
-        for item in chairs_data:
-            rn = item['rn']
-            c = item['c']
-            chair = item['element']
-            x = item['x']
-            p = item['price']
-            group = item['group']
-            is_reservable = item['is_reservable']
-
-            rn = str(rn) + str(group)
-
-            if rn not in self.chairs:
-                self.chairs[rn] = {'chairs': [], 'chairs_num': [], 'chairs_x': [], 'chairs_price':[], 'is_reservable':[]}
-
-            # افزودن صندلی به دیکشنری
-            self.chairs[rn]['chairs'].append(chair)
-            self.chairs[rn]['chairs_num'].append(c)
-            self.chairs[rn]['chairs_x'].append(x)
-            self.chairs[rn]['chairs_price'].append(p)
-            self.chairs[rn]['is_reservable'].append(is_reservable)
-
-
-
+        # فقط یک انتقال داده بین مرورگر و پایتون
+        self.chairs = self.driver.execute_script(script)
         return self.chairs
+
 
 
 
