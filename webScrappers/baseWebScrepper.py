@@ -118,8 +118,13 @@ class baseWebScrepper(ABC):
         except ElementClickInterceptedException:
             if use_js:
                 print("Element was intercepted, using JavaScript click.")
-                self.driver.execute_script("arguments[0].click();", element)
-                return True
+                try:
+                    self.driver.execute_script("arguments[0].click();", element)
+                    return True
+                except:
+                    self.driver.execute_script(f"document.body.style.zoom='{1.5}'")
+                    return self.safe_click(element, scroll, use_js)
+                    
             return False
         except WebDriverException as e:
             print(f"WebDriverException occurred: {e}")
@@ -268,22 +273,22 @@ class baseWebScrepper(ABC):
         
         
         #*no  <-
-        if (    prev_chair_num is not None and not self.is_chair_in_range(prev_chair_num, start_chair, end_chair)
+        if (    prev_chair_num is not None and not self.is_chair_in_range(prev_chair_num, start_chair, end_chair) and prev_chair_reservable
             and prev_prev_chair_num is not None and not prev_prev_chair_reservable):
             return False
         
         #*no  <-
-        if (    prev_chair_num is not None and prev_chair_num not in rn_selected_chairs_num
+        if (    prev_chair_num is not None and prev_chair_num not in rn_selected_chairs_num and prev_chair_reservable
             and prev_prev_chair_num is not None and not prev_prev_chair_reservable):
             return False
         
         #onx ->
-        if (    next_chair_num is not None and not self.is_chair_in_range(next_chair_num, start_chair, end_chair)
+        if (    next_chair_num is not None and not self.is_chair_in_range(next_chair_num, start_chair, end_chair) and next_chair_reservable
             and next_next_chair_num is None):
             return False
         
         #on* ->
-        if (    next_chair_num is not None and not self.is_chair_in_range(next_chair_num, start_chair, end_chair)
+        if (    next_chair_num is not None and not self.is_chair_in_range(next_chair_num, start_chair, end_chair) and next_chair_reservable
             and next_next_chair_num is not None and not next_next_chair_reservable):
             return False
         # #*no <-

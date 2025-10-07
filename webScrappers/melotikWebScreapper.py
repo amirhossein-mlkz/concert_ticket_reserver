@@ -18,10 +18,10 @@ class melotikWebScrepper(baseWebScrepper):
         self.chairs:dict[str,dict[str,list]] =  {}
 
         chairs = [1,2,3,4,5]
-        reservable = [False, False, True, True, True]
+        reservable = [False, False, True, True, True, True]
 
-        # self.check_single_chair_for_myself(2,[],  chairs, reservable, remain_chair=1)
-        # self.check_single_chair_for_concert(3,[], chairs, reservable, remain_chair=1)
+        self.check_single_chair_for_myself(2,[],  chairs, reservable, remain_chair=2)
+        self.check_single_chair_for_concert(2,[], chairs, reservable, remain_chair=2)
 
 
     # ---------- Step 1: Find "خرید" buttons ---------- #
@@ -206,13 +206,15 @@ class melotikWebScrepper(baseWebScrepper):
         while True:
             self.go_to_url(url)
             self.find_sans_buttons()
-            if len(self.sans_btns) == 0:
-                time.sleep(0.5)
-            else:
+            if len(self.sans_btns) > (sans_idx - 1):
                 break
+            else:
+                time.sleep(0.5)
+                continue
+
         idx = sans_idx - 1
-        if idx> (len(self.sans_btns) -1):
-            return StatusCodes.NO_SANS_FOUND
+        # if idx> (len(self.sans_btns) -1):
+        #     return StatusCodes.NO_SANS_FOUND
         
         self.go_to_sans_page(idx)
         while True:
